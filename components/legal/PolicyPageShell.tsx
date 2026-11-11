@@ -1,0 +1,179 @@
+import React from "react";
+import Link from "next/link";
+
+export interface PolicySection {
+  id: string;
+  heading: string;
+  paragraphs: string[];
+  bullets?: string[];
+}
+
+export interface PolicyHighlight {
+  label: string;
+  value: string;
+}
+
+interface PolicyPageShellProps {
+  currentPath: string;
+  eyebrow: string;
+  title: string;
+  effectiveDate: string;
+  intro: string;
+  highlights: PolicyHighlight[];
+  sections: PolicySection[];
+}
+
+const POLICY_LINKS = [
+  { label: "Refunds & Cancellations", href: "/refunds-and-cancellations" },
+  { label: "Shipping Policy", href: "/shipping-policy" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+];
+
+/**
+ * Shared editorial layout shell for ORIIKO India policy pages.
+ */
+export function PolicyPageShell({
+  currentPath,
+  eyebrow,
+  title,
+  effectiveDate,
+  intro,
+  highlights,
+  sections,
+}: PolicyPageShellProps) {
+  return (
+    <main className="flex-1 bg-[#F2F2F0] py-12 sm:py-18">
+      <div className="max-w-[1140px] mx-auto px-6 sm:px-10">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex items-center gap-2 mb-8"
+        >
+          <Link href="/" className="hover:text-[#591623] transition-colors">
+            Home
+          </Link>
+          <span>/</span>
+          <span className="text-[#26231F]">{title}</span>
+        </nav>
+
+        {/* Policy Header */}
+        <header className="border-b border-[#26231F]/15 pb-8 mb-10 space-y-4">
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#591623]/10 text-[10px] tracking-[0.22em] uppercase text-[#591623] font-semibold">
+            {eyebrow}
+          </span>
+          <h1
+            className="text-3xl sm:text-5xl font-serif font-normal text-[#26231F] leading-tight"
+            style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
+          >
+            {title}
+          </h1>
+          <p className="text-sm text-[#26231F]/75 leading-relaxed max-w-2xl font-sans">
+            {intro}
+          </p>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-[#26231F]/50 font-sans">
+            Effective Date: {effectiveDate} &bull; ORIIKO India Storefront
+          </p>
+        </header>
+
+        {/* Summary Highlights */}
+        <section
+          aria-label="Key Policy Highlights"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12"
+        >
+          {highlights.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-xl border border-[#26231F]/12 bg-[#F2F2F0] p-5 space-y-1.5"
+            >
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#8C072B] font-semibold block">
+                {item.label}
+              </span>
+              <p className="text-sm font-medium text-[#26231F] leading-snug">
+                {item.value}
+              </p>
+            </div>
+          ))}
+        </section>
+
+        {/* Content Grid: Sticky Policy Switcher + Legal Copy */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Sidebar Navigation */}
+          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+            <div className="rounded-2xl border border-[#26231F]/15 bg-[#F2F2F0] p-5 space-y-3">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-[#26231F]/55 font-semibold block">
+                ORIIKO Policies
+              </span>
+              <ul className="space-y-1.5">
+                {POLICY_LINKS.map((link) => {
+                  const isActive = currentPath === link.href;
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className={`block px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors ${
+                          isActive
+                            ? "bg-[#591623] text-[#F2F2F0]"
+                            : "text-[#26231F]/80 hover:bg-[#591623]/8 hover:text-[#591623]"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-[#26231F]/15 bg-[#F2F2F0] p-5 space-y-2.5">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-[#8C072B] font-semibold block">
+                Need Assistance?
+              </span>
+              <p className="text-xs text-[#26231F]/70 leading-relaxed">
+                Reach our India customer support desk Monday to Saturday, 10:00 AM – 7:00 PM IST.
+              </p>
+              <a
+                href="mailto:support@oriiko.com"
+                className="inline-flex items-center px-4 py-2 rounded-full bg-[#26231F] text-[#F2F2F0] text-[11px] uppercase tracking-wider font-medium hover:bg-[#591623] transition-colors"
+              >
+                support@oriiko.com
+              </a>
+            </div>
+          </aside>
+
+          {/* Main Policy Sections */}
+          <div className="lg:col-span-8 space-y-6">
+            {sections.map((section, idx) => (
+              <section
+                key={section.id}
+                id={section.id}
+                className="rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-6 sm:p-8 space-y-3"
+              >
+                <h2 className="text-xl font-serif text-[#26231F] font-normal">
+                  <span className="text-[#8C072B] mr-2 font-sans text-xs font-semibold">
+                    0{idx + 1}.
+                  </span>
+                  {section.heading}
+                </h2>
+
+                <div className="space-y-3 text-xs sm:text-sm text-[#26231F]/75 leading-relaxed font-sans">
+                  {section.paragraphs.map((p, pIdx) => (
+                    <p key={pIdx}>{p}</p>
+                  ))}
+                  {section.bullets && section.bullets.length > 0 && (
+                    <ul className="list-disc pl-5 space-y-1.5 pt-1 text-[#26231F]/80">
+                      {section.bullets.map((bullet, bIdx) => (
+                        <li key={bIdx}>{bullet}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+

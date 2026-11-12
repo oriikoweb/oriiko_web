@@ -41,22 +41,22 @@ export function FeaturedProductPromotion() {
   };
 
   return (
-    <section className="bg-[#F2F2F0] py-16 sm:py-22">
-      <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-10 space-y-2">
+    <section className="bg-[#F2F2F0] py-10 sm:py-22">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-xl mx-auto mb-7 sm:mb-10 space-y-2">
           <span className="text-[10px] tracking-[0.26em] uppercase text-[#8C072B] font-bold block">
             Drop 01 Spotlight
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-serif font-normal text-[#26231F]"
+            className="text-2xl sm:text-4xl font-serif font-normal text-[#26231F]"
             style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
           >
             {product.name}
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-5 sm:p-8 lg:p-10 shadow-xs">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-4 sm:p-8 lg:p-10 shadow-xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-start">
             {/* Gallery Column */}
             <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
               {/* Thumbnails */}
@@ -83,7 +83,7 @@ export function FeaturedProductPromotion() {
               </div>
 
               {/* Main Image Frame */}
-              <div className="flex-1 aspect-[3/4] relative bg-[#26231F] border border-[#26231F]/15 rounded-2xl overflow-hidden">
+              <div className="flex-1 aspect-[4/5] sm:aspect-[3/4] relative bg-[#26231F] border border-[#26231F]/15 rounded-2xl overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={product.galleryImages[activeImageIndex] || product.primaryImage}
@@ -280,7 +280,7 @@ export function FeaturedProductPromotion() {
                   </span>
                 </button>
 
-                <div className="flex justify-between items-center text-[11px] text-[#26231F]/60 px-1">
+                <div className="flex flex-wrap justify-between items-center gap-2 text-[11px] text-[#26231F]/60 px-1">
                   <span>Dispatches within 24 hours across India</span>
                   <Link
                     href={`/product/${product.slug}`}

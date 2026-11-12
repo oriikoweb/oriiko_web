@@ -27,7 +27,7 @@ export default function AccountPage() {
 
   if (loading || !user) {
     return (
-      <AuthShell eyebrow="Account" title="Verifying Session">
+      <AuthShell mode="storefront" eyebrow="Account" title="Verifying Session">
         <div className="py-8 text-center text-xs text-[#26231F]/60 font-sans tracking-wider uppercase">
           Loading Profile...
         </div>
@@ -50,6 +50,7 @@ export default function AccountPage() {
 
   return (
     <AuthShell
+      mode="storefront"
       eyebrow={roleLabel}
       title={profile?.full_name || "ORIIKO Member"}
       subtitle={user.email}

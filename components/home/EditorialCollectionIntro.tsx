@@ -6,16 +6,16 @@ import { IconArrowRight } from "../ui/Icons";
 
 export function EditorialCollectionIntro() {
   return (
-    <section id="editorial" className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-10">
+    <section id="editorial" className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       <div className="rounded-2xl overflow-hidden bg-[#26231F] text-[#F2F2F0] grid grid-cols-1 lg:grid-cols-12 items-stretch shadow-sm">
         {/* Left Column — Narrative */}
-        <div className="lg:col-span-6 p-8 sm:p-12 lg:p-16 flex flex-col justify-center space-y-6">
+        <div className="lg:col-span-6 p-6 sm:p-12 lg:p-16 flex flex-col justify-center space-y-5 sm:space-y-6">
           <span className="inline-flex items-center w-fit px-3 py-1 rounded-full bg-[#8C072B] text-[10px] tracking-[0.24em] uppercase text-[#F2F2F0] font-semibold">
             100% Combed Indian Cotton
           </span>
 
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-[#F2F2F0] leading-[1.12]"
+            className="text-2xl sm:text-4xl lg:text-5xl font-serif font-normal text-[#F2F2F0] leading-[1.14] sm:leading-[1.12]"
             style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
           >
             Blending heavyweight structure with everyday comfort.

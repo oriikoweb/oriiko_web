@@ -42,14 +42,14 @@ export function ShopTheLook() {
     PRODUCTS.find((p) => p.id === activeSpot.productId) || PRODUCTS[0];
 
   return (
-    <section className="bg-[#F2F2F0] py-16 sm:py-22 max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8">
+    <section className="bg-[#F2F2F0] py-10 sm:py-22 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
       {/* Centered Header (Hannovae Inspiration Block) */}
-      <div className="text-center max-w-xl mx-auto mb-12 space-y-2.5">
+      <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12 space-y-2">
         <span className="text-[11px] tracking-[0.28em] uppercase text-[#8C072B] font-semibold block">
           Inspiration
         </span>
         <h2
-          className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-[#26231F]"
+          className="text-2xl sm:text-4xl lg:text-5xl font-serif font-normal text-[#26231F]"
           style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
         >
           Shop Looks
@@ -59,7 +59,7 @@ export function ShopTheLook() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-center">
         {/* Interactive Hotspot Look Image */}
         <div className="lg:col-span-8 relative aspect-[4/5] sm:aspect-[16/11] bg-[#26231F] overflow-hidden border border-[#26231F]/15 rounded-2xl group">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -76,9 +76,9 @@ export function ShopTheLook() {
               <button
                 key={spot.id}
                 onClick={() => setActiveSpotId(spot.id)}
-                className={`absolute w-9 h-9 rounded-full -ml-4 -mt-4 flex items-center justify-center transition-all cursor-pointer ${
+                className={`absolute w-10 h-10 sm:w-9 sm:h-9 rounded-full -ml-5 -mt-5 sm:-ml-4 sm:-mt-4 flex items-center justify-center transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#8C072B] text-[#F2F2F0] scale-120 shadow-lg ring-4 ring-[#8C072B]/35"
+                    ? "bg-[#8C072B] text-[#F2F2F0] scale-115 shadow-lg ring-4 ring-[#8C072B]/35"
                     : "bg-[#F2F2F0] text-[#26231F] hover:scale-110 shadow-md hover:bg-[#591623] hover:text-[#F2F2F0]"
                 }`}
                 style={{ top: spot.top, left: spot.left }}
@@ -91,8 +91,8 @@ export function ShopTheLook() {
         </div>
 
         {/* Selected Product Card from Hotspot */}
-        <div className="lg:col-span-4 bg-[#F2F2F0] border border-[#26231F]/15 rounded-2xl p-5 sm:p-7 space-y-5 shadow-xs">
-          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-[#26231F] border border-[#26231F]/10">
+        <div className="lg:col-span-4 bg-[#F2F2F0] border border-[#26231F]/15 rounded-2xl p-4 sm:p-7 space-y-4 sm:space-y-5 shadow-xs">
+          <div className="aspect-[4/5] sm:aspect-[3/4] overflow-hidden rounded-xl bg-[#26231F] border border-[#26231F]/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               key={activeProduct.id}

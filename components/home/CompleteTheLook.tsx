@@ -33,8 +33,8 @@ export function CompleteTheLook() {
   };
 
   return (
-    <section className="bg-[#F2F2F0] py-16 sm:py-22 max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8">
-      <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#26231F]/12 pb-6 gap-4">
+    <section className="bg-[#F2F2F0] py-10 sm:py-22 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mb-7 sm:mb-10 flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#26231F]/12 pb-5 sm:pb-6 gap-3 sm:gap-4">
         <div>
           <span className="text-[11px] tracking-[0.25em] uppercase text-[#8C072B] font-semibold block mb-1">
             Full Fit Direction
@@ -51,16 +51,16 @@ export function CompleteTheLook() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
-        {/* Coordinated Ensemble Products */}
-        <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-start">
+        {/* Coordinated Ensemble Products (Horizontal swipe cards on mobile, 3-col on sm+) */}
+        <div className="lg:col-span-8 flex sm:grid sm:grid-cols-3 gap-3.5 sm:gap-5 overflow-x-auto pb-2 sm:pb-0 snap-x snap-mandatory no-scrollbar">
           {ensembleItems.map((item) => {
             const isSelected = selectedItemIds.includes(item.id);
             return (
               <div
                 key={item.id}
                 onClick={() => toggleItem(item.id)}
-                className={`cursor-pointer p-3 rounded-2xl border transition-all relative bg-[#F2F2F0] ${
+                className={`min-w-[68%] min-[420px]:min-w-[54%] sm:min-w-0 snap-start cursor-pointer p-3 rounded-2xl border transition-all relative bg-[#F2F2F0] ${
                   isSelected
                     ? "border-[#591623] shadow-sm"
                     : "border-[#26231F]/15 opacity-60 hover:opacity-100"
@@ -101,7 +101,7 @@ export function CompleteTheLook() {
         </div>
 
         {/* Bundle Summary & CTA Box */}
-        <div className="lg:col-span-4 bg-[#F2F2F0] border border-[#26231F]/15 rounded-2xl p-6 sm:p-7 space-y-5 shadow-xs">
+        <div className="lg:col-span-4 bg-[#F2F2F0] border border-[#26231F]/15 rounded-2xl p-5 sm:p-7 space-y-4 sm:space-y-5 shadow-xs">
           <span className="text-[10px] tracking-[0.25em] uppercase text-[#8C072B] font-semibold block">
             3-Piece Streetwear Fit
           </span>

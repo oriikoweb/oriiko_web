@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { PolicyPageShell } from "../../components/legal/PolicyPageShell";
 
 export const metadata: Metadata = {
-  title: "Shipping Policy — ORIIKO",
+  title: "Shipping Policy & Pan-India Delivery",
   description:
-    "ORIIKO India shipping policy covering dispatch times, metro and pan-India delivery windows, free shipping threshold, and COD.",
+    "ORIIKO India shipping policy covering dispatch timelines, metro and pan-India delivery windows, free shipping threshold, and Cash on Delivery (COD).",
 };
 
 export default function ShippingPolicyPage() {

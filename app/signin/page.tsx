@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { useStore } from "../../context/StoreContext";
@@ -11,6 +10,7 @@ import {
   AuthPasswordField,
   AUTH_LABEL_CLASS,
   AUTH_INPUT_CLASS,
+  AUTH_SUBMIT_BUTTON_CLASS,
 } from "../../components/auth/AuthShell";
 
 export default function SignInPage() {
@@ -47,24 +47,13 @@ export default function SignInPage() {
 
   return (
     <AuthShell
-      eyebrow="Account Access"
-      title="Sign In"
-      subtitle="Enter your email and passcode to view orders, saved details, and drop updates."
-      footer={
-        <p className="text-xs text-[#26231F]/70 font-sans">
-          New to ORIIKO?{" "}
-          <Link
-            href="/signup"
-            className="font-semibold text-[#591623] hover:text-[#8C072B] underline underline-offset-4 transition-colors"
-          >
-            Create an account
-          </Link>
-        </p>
-      }
+      title="Welcome back"
+      subtitle="Access orders, saved details, and early drops."
+      activeTab="signin"
     >
       <AuthErrorBanner message={errorMsg} />
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="signin-email" className={AUTH_LABEL_CLASS}>
             Email Address
@@ -72,6 +61,11 @@ export default function SignInPage() {
           <input
             id="signin-email"
             type="email"
+            inputMode="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            enterKeyHint="next"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -87,14 +81,15 @@ export default function SignInPage() {
           value={password}
           onChange={setPassword}
           autoComplete="current-password"
+          enterKeyHint="go"
         />
 
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="w-full py-3.5 mt-2 rounded-full bg-[#591623] hover:bg-[#8C072B] disabled:opacity-50 disabled:cursor-not-allowed text-[#F2F2F0] text-xs uppercase tracking-[0.2em] font-medium transition-colors cursor-pointer"
+          className={AUTH_SUBMIT_BUTTON_CLASS}
         >
-          {isSubmitting ? "Authenticating..." : "Sign In"}
+          {isSubmitting ? "Signing In..." : "Sign In"}
         </button>
       </form>
     </AuthShell>

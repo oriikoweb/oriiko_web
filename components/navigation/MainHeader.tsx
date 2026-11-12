@@ -138,13 +138,13 @@ export function MainHeader() {
         </div>
 
         {/* ── Main nav row ─────────────────────────────────── */}
-        <div className="relative flex items-center px-4 sm:px-8 xl:px-12 border-b border-[#26231F]/12" style={{ height: "52px" }}>
+        <div className="relative flex items-center justify-between px-3 sm:px-8 xl:px-12 border-b border-[#26231F]/12 h-[54px] sm:h-[58px]">
 
           {/* LEFT: Hamburger + desktop nav links */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 sm:gap-6 shrink-0">
             <button
               onClick={() => setIsNavOpen(true)}
-              className="p-1 -ml-1 text-[#26231F] hover:text-[#591623] transition-colors focus:outline-none cursor-pointer"
+              className="flex items-center justify-center p-1.5 -ml-1.5 sm:p-1 sm:-ml-1 text-[#26231F] hover:text-[#591623] transition-colors focus:outline-none cursor-pointer"
               aria-label="Open Menu"
             >
               <IconMenu size={20} />
@@ -233,11 +233,11 @@ export function MainHeader() {
             </nav>
           </div>
 
-          {/* CENTER: Logo — absolutely positioned so it's truly centered in the bar */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          {/* CENTER: Logo — dead-centered horizontally and vertically across mobile & desktop */}
+          <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none">
             <Link
               href="/"
-              className="inline-flex items-center gap-2.5 group focus:outline-none pointer-events-auto"
+              className="flex items-center justify-center gap-1.5 sm:gap-2.5 h-full px-1 group focus:outline-none pointer-events-auto"
               aria-label="ORIIKO Home"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -245,10 +245,10 @@ export function MainHeader() {
                 src="/logo1_burgundy.svg"
                 alt=""
                 aria-hidden="true"
-                className="h-7 w-auto object-contain select-none group-hover:opacity-80 transition-opacity duration-200"
+                className="block h-[22px] sm:h-[26px] w-auto object-contain shrink-0 select-none group-hover:opacity-80 transition-opacity duration-200"
               />
               <span
-                className="text-[1.35rem] font-bold tracking-[0.22em] uppercase text-[#591623] group-hover:text-[#8C072B] transition-colors select-none leading-none"
+                className="inline-flex items-center text-[1.08rem] sm:text-[1.32rem] font-bold tracking-[0.18em] sm:tracking-[0.22em] -mr-[0.18em] sm:-mr-[0.22em] uppercase text-[#591623] group-hover:text-[#8C072B] transition-colors select-none leading-[1] translate-y-[0.5px] sm:translate-y-[1px]"
                 style={{ fontFamily: '"Futura", "Futura PT", "Century Gothic", "Trebuchet MS", sans-serif' }}
               >
                 ORIIKO
@@ -256,8 +256,8 @@ export function MainHeader() {
             </Link>
           </div>
 
-          {/* RIGHT: Globe · Bag · Account · Search */}
-          <div className="ml-auto flex items-center gap-5 text-[#26231F]">
+          {/* RIGHT: Globe (desktop) · Bag · Account · Search */}
+          <div className="ml-auto flex items-center gap-1 sm:gap-5 text-[#26231F] shrink-0 [&>*:first-child]:hidden sm:[&>*:first-child]:inline-flex [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:p-1.5 sm:[&>button]:p-1 [&>a]:flex [&>a]:items-center [&>a]:justify-center [&>a]:p-1.5 sm:[&>a]:p-1">
             {/* Globe */}
             <button
               onClick={() => setIsGlobeModalOpen(true)}

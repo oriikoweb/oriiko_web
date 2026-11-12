@@ -22,7 +22,7 @@ function AuthRedirectContent() {
   }, [loading, user, searchParams, router]);
 
   return (
-    <main className="flex-1 bg-[#F2F2F0] flex items-center justify-center py-24">
+    <main className="min-h-[100dvh] bg-[#F2F2F0] flex items-center justify-center px-4">
       <span className="text-[11px] uppercase tracking-[0.22em] text-[#26231F]/55 font-sans">
         Redirecting...
       </span>
@@ -32,7 +32,7 @@ function AuthRedirectContent() {
 
 export default function AuthRedirectPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F2F2F0]" />}>
+    <Suspense fallback={<div className="min-h-[100dvh] bg-[#F2F2F0]" />}>
       <AuthRedirectContent />
     </Suspense>
   );

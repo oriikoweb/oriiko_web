@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { useStore } from "../../context/StoreContext";
@@ -11,6 +10,7 @@ import {
   AuthPasswordField,
   AUTH_LABEL_CLASS,
   AUTH_INPUT_CLASS,
+  AUTH_SUBMIT_BUTTON_CLASS,
 } from "../../components/auth/AuthShell";
 
 export default function SignUpPage() {
@@ -64,24 +64,13 @@ export default function SignUpPage() {
 
   return (
     <AuthShell
-      eyebrow="Member Registry"
-      title="Create Account"
-      subtitle="Join ORIIKO for faster checkout, order tracking, and early drop access across India."
-      footer={
-        <p className="text-xs text-[#26231F]/70 font-sans">
-          Already registered?{" "}
-          <Link
-            href="/signin"
-            className="font-semibold text-[#591623] hover:text-[#8C072B] underline underline-offset-4 transition-colors"
-          >
-            Sign in to your account
-          </Link>
-        </p>
-      }
+      title="Join ORIIKO"
+      subtitle="Faster checkout, order tracking, and early drop access."
+      activeTab="signup"
     >
       <AuthErrorBanner message={errorMsg} />
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="signup-name" className={AUTH_LABEL_CLASS}>
             Full Name
@@ -89,6 +78,8 @@ export default function SignUpPage() {
           <input
             id="signup-name"
             type="text"
+            autoCapitalize="words"
+            enterKeyHint="next"
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -105,6 +96,11 @@ export default function SignUpPage() {
           <input
             id="signup-email"
             type="email"
+            inputMode="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            enterKeyHint="next"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -120,6 +116,7 @@ export default function SignUpPage() {
           value={password}
           onChange={setPassword}
           autoComplete="new-password"
+          enterKeyHint="next"
           minLength={6}
         />
 
@@ -129,21 +126,17 @@ export default function SignUpPage() {
           value={confirmPassword}
           onChange={setConfirmPassword}
           autoComplete="new-password"
+          enterKeyHint="done"
           minLength={6}
         />
 
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="w-full py-3.5 mt-2 rounded-full bg-[#591623] hover:bg-[#8C072B] disabled:opacity-50 disabled:cursor-not-allowed text-[#F2F2F0] text-xs uppercase tracking-[0.2em] font-medium transition-colors cursor-pointer"
+          className={AUTH_SUBMIT_BUTTON_CLASS}
         >
           {isSubmitting ? "Creating Profile..." : "Create Account"}
         </button>
-
-        <p className="text-[10px] text-[#26231F]/50 text-center pt-1 font-sans leading-relaxed">
-          By registering, you agree to ORIIKO&apos;s terms of service and client
-          privacy notice.
-        </p>
       </form>
     </AuthShell>
   );

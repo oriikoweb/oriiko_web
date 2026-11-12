@@ -16,9 +16,9 @@ export function AnnouncementBar() {
   return (
     <aside
       aria-label="Store Announcements"
-      className="bg-[#591623] text-[#F2F2F0] py-2.5 px-4 overflow-hidden relative z-40 select-none border-b border-[#26231F]/15"
+      className="bg-[#591623] text-[#F2F2F0] py-2 sm:py-2.5 px-3 sm:px-4 overflow-hidden relative z-40 select-none border-b border-[#26231F]/15"
     >
-      <div className="w-full overflow-hidden text-[11px] font-medium tracking-[0.18em] uppercase">
+      <div className="w-full overflow-hidden text-[10px] sm:text-[11px] font-medium tracking-[0.14em] sm:tracking-[0.18em] uppercase">
         <div className="animate-ticker flex whitespace-nowrap items-center">
           {ANNOUNCEMENTS.concat(ANNOUNCEMENTS).map((item, index) => (
             <Link

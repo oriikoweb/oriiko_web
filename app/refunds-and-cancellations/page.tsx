@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { PolicyPageShell } from "../../components/legal/PolicyPageShell";
 
 export const metadata: Metadata = {
-  title: "Refunds & Cancellations — ORIIKO",
+  title: "Refunds, Exchanges & Cancellations Policy",
   description:
-    "ORIIKO India policy on order cancellations, 14-day size exchanges, reverse pickups, and refunds.",
+    "ORIIKO India policy covering order cancellations, 14-day size exchanges, reverse pickups, and refund timelines.",
 };
 
 export default function RefundsAndCancellationsPage() {

@@ -17,13 +17,13 @@ export function DeliveryMarquee() {
   return (
     <section
       aria-label="Shipping and Quality Highlights"
-      className="bg-[#8C072B] text-[#F2F2F0] py-4 overflow-hidden my-6 border-y border-[#591623]"
+      className="bg-[#8C072B] text-[#F2F2F0] py-3 sm:py-4 overflow-hidden my-4 sm:my-6 border-y border-[#591623]"
     >
-      <div className="animate-ticker flex items-center gap-10 whitespace-nowrap">
+      <div className="animate-ticker flex items-center gap-6 sm:gap-10 whitespace-nowrap">
         {repeated.map((text, idx) => (
           <span
             key={idx}
-            className="inline-flex items-center gap-10 text-xs sm:text-sm uppercase tracking-[0.24em] font-medium"
+            className="inline-flex items-center gap-6 sm:gap-10 text-[11px] sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.24em] font-medium"
           >
             <span>{text}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#F2F2F0]/60" />

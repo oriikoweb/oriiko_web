@@ -1,143 +1,209 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { IconArrowRight, IconChevronLeft, IconChevronRight } from "../ui/Icons";
 
 const HERO_SLIDES = [
   {
-    id: "slide-01",
-    eyebrow: "Drop 01 • Signature Fleece",
-    title: "Heavyweight Hoodies",
-    subtitle:
-      "480 GSM combed loopback French terry cut with dropped shoulders, double-lined hoods, and clean tonal embroidery built for India.",
-    image:
-      "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "ORIIKO Heavyweight Hoodies Drop 01",
-    primaryCta: { label: "Explore Hoodies", href: "/shop?category=hoodies" },
-    secondaryCta: { label: "Shop All Drops", href: "/shop" },
+    eyebrow: "Drop 01 · Pan-India",
+    title: "Built in Heavyweight.",
+    subtitle: "480 GSM French Terry hoodies & dense embroidery stitched for Indian streets.",
+    poster:
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1800&q=85",
+    ctaLabel: "Shop the Drop",
+    ctaHref: "/shop",
   },
   {
-    id: "slide-02",
-    eyebrow: "Core Collection • Chain-Stitch",
-    title: "Embroidered Tees & Crewnecks",
-    subtitle:
-      "280 GSM bio-washed oversized jersey and 420 GSM crewnecks finished with high-density multi-thread artwork.",
-    image:
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "ORIIKO Embroidered T-Shirts and Sweatshirts",
-    primaryCta: { label: "Explore Tees", href: "/shop?category=t-shirts" },
-    secondaryCta: { label: "Shop Sweatshirts", href: "/shop?category=sweatshirts" },
+    eyebrow: "Signature Craft",
+    title: "Tactile Crest Tees.",
+    subtitle: "Relaxed drop-shoulder silhouettes cut from combed cotton jersey.",
+    poster:
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1800&q=85",
+    ctaLabel: "Explore Tees",
+    ctaHref: "/shop?category=t-shirts",
+  },
+  {
+    eyebrow: "Core Silhouette",
+    title: "Studio Layering.",
+    subtitle: "Structured boxy outerwear & fleece sets tailored for daily movement.",
+    poster:
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=85",
+    ctaLabel: "View Fleece",
+    ctaHref: "/shop?category=hoodies",
   },
 ];
 
-export function HeroCollection() {
-  const [activeIndex, setActiveIndex] = useState(0);
+const DESKTOP_VIDEO_SRC =
+  process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "/videos/hero-bg.mp4";
+const MOBILE_VIDEO_SRC =
+  process.env.NEXT_PUBLIC_HERO_VIDEO_MOBILE_URL || DESKTOP_VIDEO_SRC;
 
+export function HeroCollection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Track reduced motion preference & viewport breakpoint for video source selection
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6500);
-    return () => clearInterval(timer);
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+
+    const updatePrefs = () => {
+      setPrefersReducedMotion(motionQuery.matches);
+      setIsMobileViewport(mobileQuery.matches);
+    };
+
+    updatePrefs();
+    motionQuery.addEventListener("change", updatePrefs);
+    mobileQuery.addEventListener("change", updatePrefs);
+
+    return () => {
+      motionQuery.removeEventListener("change", updatePrefs);
+      mobileQuery.removeEventListener("change", updatePrefs);
+    };
   }, []);
 
-  const current = HERO_SLIDES[activeIndex];
+  // Auto-cycle fallback slides when background video is paused / unavailable
+  useEffect(() => {
+    if (videoReady && !videoError) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [videoReady, videoError]);
 
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
-  };
+  // Pause hero video offscreen to preserve mobile battery & decode bandwidth
+  useEffect(() => {
+    const section = sectionRef.current;
+    const video = videoRef.current;
+    if (!section || !video || prefersReducedMotion || videoError) return;
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % HERO_SLIDES.length);
-  };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!video) return;
+        if (entry.isIntersecting) {
+          video.play().catch(() => {
+            // Low-power mode / autoplay block gracefully leaves crisp poster image visible
+          });
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [prefersReducedMotion, videoError]);
+
+  const activeSlide = HERO_SLIDES[currentSlide];
+  const videoSrc = isMobileViewport ? MOBILE_VIDEO_SRC : DESKTOP_VIDEO_SRC;
 
   return (
     <section
-      aria-label="Featured Drop Hero"
-      className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-5"
+      ref={sectionRef}
+      aria-label="ORIIKO Drop Hero"
+      className="relative w-full min-h-[76svh] sm:min-h-[84vh] lg:min-h-[88vh] bg-[#26231F] overflow-hidden flex items-end sm:items-center justify-center"
     >
-      <div className="relative min-h-[72vh] sm:min-h-[82vh] w-full rounded-2xl overflow-hidden bg-[#26231F] border border-[#26231F]/15 flex items-center justify-center">
-        {/* Background Slides */}
+      {/* Layer 1: Always-mounted poster/slide imagery for zero-latency LCP & seamless fallback */}
+      <div className="absolute inset-0 z-0">
         {HERO_SLIDES.map((slide, idx) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            key={slide.id}
-            src={slide.image}
-            alt={slide.imageAlt}
-            className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 ease-out ${
-              idx === activeIndex ? "opacity-75 scale-100" : "opacity-0 scale-105"
+            key={slide.eyebrow}
+            src={slide.poster}
+            alt={slide.title}
+            className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${
+              idx === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           />
         ))}
+      </div>
 
-        {/* Deep Scrim Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#26231F]/45 via-[#26231F]/45 to-[#26231F]/80" />
+      {/* Layer 2: Dedicated full-bleed edge-to-edge background video slot */}
+      {!prefersReducedMotion && !videoError && (
+        <video
+          key={videoSrc}
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          disablePictureInPicture
+          poster={HERO_SLIDES[0].poster}
+          aria-hidden="true"
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => {
+            setVideoError(true);
+            setVideoReady(false);
+          }}
+          className={`absolute inset-0 z-[1] w-full h-full object-cover object-center pointer-events-none transition-opacity duration-700 ${
+            videoReady ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+      )}
 
-        {/* Centered Editorial Copy (Hannovae Slider Style) */}
-        <div className="relative z-10 max-w-2xl mx-auto px-6 sm:px-10 text-center text-[#F2F2F0] space-y-5 py-16">
-          <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#F2F2F0]/15 backdrop-blur-xs border border-[#F2F2F0]/20 text-[11px] font-medium tracking-[0.26em] uppercase text-[#F2F2F0]">
-            {current.eyebrow}
-          </span>
+      {/* Layer 3: Multi-stop editorial contrast scrim */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-[2] bg-gradient-to-t from-[#26231F]/88 via-[#26231F]/40 to-[#591623]/25 sm:bg-gradient-to-b sm:from-[#26231F]/35 sm:via-[#26231F]/40 sm:to-[#26231F]/80"
+      />
 
-          <h1
-            className="text-4xl sm:text-5xl lg:text-7xl font-serif font-normal leading-[1.06] tracking-tight"
-            style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
+      {/* Layer 4: Foreground Copy & Pill CTAs */}
+      <div className="relative z-[3] w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-20 pb-12 sm:py-20 flex flex-col items-start sm:items-center text-left sm:text-center">
+        <span className="inline-flex items-center gap-2 rounded-full bg-[#F2F2F0]/12 backdrop-blur-md px-3.5 py-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-[#F2F2F0] mb-4 sm:mb-5">
+          {activeSlide.eyebrow}
+        </span>
+
+        <h1 className="text-[2.25rem] leading-[1.04] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-normal tracking-[-0.02em] text-[#F2F2F0] max-w-3xl mb-3 sm:mb-4">
+          {activeSlide.title}
+        </h1>
+
+        <p className="text-[13px] sm:text-[15px] leading-relaxed text-[#F2F2F0]/85 max-w-md sm:max-w-lg mb-7 sm:mb-8">
+          {activeSlide.subtitle}
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+          <Link
+            href={activeSlide.ctaHref}
+            className="inline-flex items-center justify-center rounded-full bg-[#F2F2F0] text-[#26231F] px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-[#591623] hover:text-[#F2F2F0] transition-colors min-h-[44px]"
           >
-            {current.title}
-          </h1>
+            {activeSlide.ctaLabel}
+          </Link>
+          <Link
+            href="/shop?category=hoodies"
+            className="inline-flex items-center justify-center rounded-full bg-[#26231F]/55 backdrop-blur-md text-[#F2F2F0] border border-[#F2F2F0]/25 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] font-medium hover:bg-[#26231F]/80 transition-colors min-h-[44px]"
+          >
+            Heavyweight Hoodies
+          </Link>
+        </div>
 
-          <p className="text-xs sm:text-sm font-sans leading-relaxed text-[#F2F2F0]/85 max-w-lg mx-auto">
-            {current.subtitle}
-          </p>
-
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-3.5">
-            <Link
-              href={current.primaryCta.href}
-              className="px-7 py-3.5 rounded-full bg-[#F2F2F0] hover:bg-[#8C072B] text-[#26231F] hover:text-[#F2F2F0] text-xs uppercase tracking-[0.2em] font-semibold transition-colors inline-flex items-center gap-2.5 shadow-lg"
-            >
-              <span>{current.primaryCta.label}</span>
-              <IconArrowRight size={14} />
-            </Link>
-            <Link
-              href={current.secondaryCta.href}
-              className="px-7 py-3.5 rounded-full border border-[#F2F2F0]/45 hover:border-[#F2F2F0] bg-[#26231F]/35 backdrop-blur-xs text-[#F2F2F0] text-xs uppercase tracking-[0.2em] font-medium transition-colors"
-            >
-              {current.secondaryCta.label}
-            </Link>
+        {/* Minimal dot selector for poster slides when static poster fallback is active */}
+        {(!videoReady || videoError) && (
+          <div className="flex items-center gap-2 mt-7 sm:mt-10">
+            {HERO_SLIDES.map((s, idx) => (
+              <button
+                key={s.eyebrow}
+                type="button"
+                onClick={() => setCurrentSlide(idx)}
+                aria-label={`View slide ${idx + 1}: ${s.title}`}
+                className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                  idx === currentSlide
+                    ? "w-7 bg-[#F2F2F0]"
+                    : "w-2 bg-[#F2F2F0]/40 hover:bg-[#F2F2F0]/65"
+                }`}
+              />
+            ))}
           </div>
-        </div>
-
-        {/* Slide Controls */}
-        <button
-          onClick={handlePrev}
-          aria-label="Previous Hero Slide"
-          className="hidden sm:flex absolute left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#26231F]/45 hover:bg-[#591623] text-[#F2F2F0] border border-[#F2F2F0]/20 items-center justify-center transition-colors cursor-pointer"
-        >
-          <IconChevronLeft size={18} />
-        </button>
-        <button
-          onClick={handleNext}
-          aria-label="Next Hero Slide"
-          className="hidden sm:flex absolute right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#26231F]/45 hover:bg-[#591623] text-[#F2F2F0] border border-[#F2F2F0]/20 items-center justify-center transition-colors cursor-pointer"
-        >
-          <IconChevronRight size={18} />
-        </button>
-
-        {/* Bottom Indicator Pills */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5">
-          {HERO_SLIDES.map((slide, idx) => (
-            <button
-              key={slide.id}
-              onClick={() => setActiveIndex(idx)}
-              aria-label={`View slide ${idx + 1}: ${slide.title}`}
-              className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                idx === activeIndex
-                  ? "w-8 bg-[#F2F2F0]"
-                  : "w-3 bg-[#F2F2F0]/40 hover:bg-[#F2F2F0]/70"
-              }`}
-            />
-          ))}
-        </div>
+        )}
       </div>
     </section>
   );

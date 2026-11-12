@@ -8,15 +8,15 @@ export function DropOffersSection() {
   return (
     <section
       aria-label="Drop 01 Offers and Early Access"
-      className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 pt-6 pb-8"
+      className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-6 sm:pb-8"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
         {/* Left Card — Offers & Value Breakdown */}
         <Link
           href="/shop"
           className="group relative grid grid-cols-1 sm:grid-cols-12 rounded-2xl overflow-hidden border border-[#26231F]/12 bg-[#F2F2F0] shadow-xs hover:border-[#591623]/35 transition-all"
         >
-          <div className="sm:col-span-5 relative aspect-[16/10] sm:aspect-auto min-h-[220px] bg-[#26231F] overflow-hidden">
+          <div className="sm:col-span-5 relative aspect-[16/10] sm:aspect-auto min-h-[190px] sm:min-h-[220px] bg-[#26231F] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=80"
@@ -25,7 +25,7 @@ export function DropOffersSection() {
             />
           </div>
 
-          <div className="sm:col-span-7 p-6 sm:p-8 flex flex-col justify-center space-y-4">
+          <div className="sm:col-span-7 p-5 sm:p-8 flex flex-col justify-center space-y-3.5 sm:space-y-4">
             <div className="space-y-1.5">
               <span className="text-[10px] tracking-[0.22em] uppercase text-[#26231F]/55 font-semibold block">
                 Drop 01 &middot; Value
@@ -85,7 +85,7 @@ export function DropOffersSection() {
           href="/signup"
           className="group relative grid grid-cols-1 sm:grid-cols-12 rounded-2xl overflow-hidden bg-[#591623] text-[#F2F2F0] shadow-sm"
         >
-          <div className="sm:col-span-5 relative aspect-[16/10] sm:aspect-auto min-h-[220px] bg-[#26231F] overflow-hidden">
+          <div className="sm:col-span-5 relative aspect-[16/10] sm:aspect-auto min-h-[190px] sm:min-h-[220px] bg-[#26231F] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=900&q=80"
@@ -94,7 +94,7 @@ export function DropOffersSection() {
             />
           </div>
 
-          <div className="sm:col-span-7 p-6 sm:p-8 flex flex-col justify-center space-y-4">
+          <div className="sm:col-span-7 p-5 sm:p-8 flex flex-col justify-center space-y-3.5 sm:space-y-4">
             <span className="text-[10px] tracking-[0.22em] uppercase text-[#F2F2F0]/80 font-semibold block">
               Limited Release &middot; India
             </span>

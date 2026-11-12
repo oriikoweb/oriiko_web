@@ -14,16 +14,16 @@ export function QuickViewModal() {
   const currentVariant = quickViewProduct.variants[selectedVariantIndex] || quickViewProduct.variants[0];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 overflow-y-auto flex items-end sm:items-center justify-center p-0 sm:p-6">
       <div
         onClick={() => setQuickViewProduct(null)}
-        className="fixed inset-0 bg-[#26231F]/60 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#26231F]/60 backdrop-blur-[3px] transition-opacity duration-300"
       />
 
-      <div className="relative bg-[#F2F2F0] text-[#26231F] w-full max-w-3xl overflow-hidden shadow-2xl border border-[#26231F]/15 rounded-2xl animate-in zoom-in-95 duration-200 z-10">
+      <div className="relative bg-[#F2F2F0] text-[#26231F] w-full max-w-3xl max-h-[92svh] overflow-y-auto shadow-2xl border border-[#26231F]/15 rounded-t-2xl sm:rounded-2xl transition-all duration-300 z-10">
         <button
           onClick={() => setQuickViewProduct(null)}
-          className="absolute top-4 right-4 z-20 p-2 text-[#26231F] hover:text-[#591623] transition-colors bg-[#F2F2F0]/80 rounded-full"
+          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-20 p-2 text-[#26231F] hover:text-[#591623] transition-colors bg-[#F2F2F0]/90 rounded-full shadow-xs cursor-pointer"
           aria-label="Close Preview"
         >
           <IconClose size={20} />
@@ -31,7 +31,7 @@ export function QuickViewModal() {
 
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Image */}
-          <div className="aspect-[3/4] bg-[#F2F2F0] overflow-hidden border-b md:border-b-0 md:border-r border-[#26231F]/10">
+          <div className="aspect-[4/3] md:aspect-[3/4] max-h-[38svh] md:max-h-none bg-[#F2F2F0] overflow-hidden border-b md:border-b-0 md:border-r border-[#26231F]/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={quickViewProduct.primaryImage}

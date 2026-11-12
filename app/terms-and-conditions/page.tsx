@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { PolicyPageShell } from "../../components/legal/PolicyPageShell";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions — ORIIKO",
+  title: "Terms & Conditions",
   description:
-    "Terms governing browsing, account registration, pricing, and purchases on ORIIKO India.",
+    "Terms and conditions governing browsing, account registration, INR pricing, intellectual property, and purchases on ORIIKO India.",
 };
 
 export default function TermsAndConditionsPage() {

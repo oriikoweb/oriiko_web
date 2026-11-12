@@ -43,12 +43,12 @@ export function PolicyPageShell({
   sections,
 }: PolicyPageShellProps) {
   return (
-    <main className="flex-1 bg-[#F2F2F0] py-12 sm:py-18">
-      <div className="max-w-[1140px] mx-auto px-6 sm:px-10">
+    <main className="flex-1 bg-[#F2F2F0] py-8 sm:py-18">
+      <div className="max-w-[1140px] mx-auto px-4 sm:px-10">
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex items-center gap-2 mb-8"
+          className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex flex-wrap items-center gap-2 mb-6 sm:mb-8"
         >
           <Link href="/" className="hover:text-[#591623] transition-colors">
             Home
@@ -79,12 +79,12 @@ export function PolicyPageShell({
         {/* Summary Highlights */}
         <section
           aria-label="Key Policy Highlights"
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-12"
         >
           {highlights.map((item) => (
             <div
               key={item.label}
-              className="rounded-xl border border-[#26231F]/12 bg-[#F2F2F0] p-5 space-y-1.5"
+              className="rounded-xl border border-[#26231F]/12 bg-[#F2F2F0] p-4 sm:p-5 space-y-1"
             >
               <span className="text-[10px] uppercase tracking-[0.2em] text-[#8C072B] font-semibold block">
                 {item.label}
@@ -96,11 +96,31 @@ export function PolicyPageShell({
           ))}
         </section>
 
-        {/* Content Grid: Sticky Policy Switcher + Legal Copy */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        {/* Mobile Quick Policy Tabs */}
+        <div className="lg:hidden flex gap-2 overflow-x-auto pb-4 mb-4 no-scrollbar">
+          {POLICY_LINKS.map((link) => {
+            const isActive = currentPath === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`shrink-0 px-3.5 py-2 min-h-[38px] inline-flex items-center rounded-full text-[11px] font-medium border transition-colors ${
+                  isActive
+                    ? "bg-[#591623] text-[#F2F2F0] border-[#591623]"
+                    : "bg-[#F2F2F0] text-[#26231F]/80 border-[#26231F]/15 hover:border-[#591623]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Content Grid: Policy Content First on Mobile, Sidebar Left on Desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-start">
           {/* Sidebar Navigation */}
-          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
-            <div className="rounded-2xl border border-[#26231F]/15 bg-[#F2F2F0] p-5 space-y-3">
+          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-5 sm:space-y-6 lg:sticky lg:top-28">
+            <div className="hidden lg:block rounded-2xl border border-[#26231F]/15 bg-[#F2F2F0] p-5 space-y-3">
               <span className="text-[10px] uppercase tracking-[0.22em] text-[#26231F]/55 font-semibold block">
                 ORIIKO Policies
               </span>
@@ -134,7 +154,7 @@ export function PolicyPageShell({
               </p>
               <a
                 href="mailto:support@oriiko.com"
-                className="inline-flex items-center px-4 py-2 rounded-full bg-[#26231F] text-[#F2F2F0] text-[11px] uppercase tracking-wider font-medium hover:bg-[#591623] transition-colors"
+                className="inline-flex items-center px-4 py-2.5 min-h-[40px] rounded-full bg-[#26231F] text-[#F2F2F0] text-[11px] uppercase tracking-wider font-medium hover:bg-[#591623] transition-colors"
               >
                 support@oriiko.com
               </a>
@@ -142,12 +162,12 @@ export function PolicyPageShell({
           </aside>
 
           {/* Main Policy Sections */}
-          <div className="lg:col-span-8 space-y-6">
+          <div className="order-1 lg:order-2 lg:col-span-8 space-y-4 sm:space-y-6">
             {sections.map((section, idx) => (
               <section
                 key={section.id}
                 id={section.id}
-                className="rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-6 sm:p-8 space-y-3"
+                className="rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-5 sm:p-8 space-y-3"
               >
                 <h2 className="text-xl font-serif text-[#26231F] font-normal">
                   <span className="text-[#8C072B] mr-2 font-sans text-xs font-semibold">

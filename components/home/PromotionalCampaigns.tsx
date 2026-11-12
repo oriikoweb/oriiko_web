@@ -31,13 +31,13 @@ const EDITORIAL_CARDS = [
 
 export function PromotionalCampaigns() {
   return (
-    <section className="py-12 sm:py-16 max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <section className="py-8 sm:py-16 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {EDITORIAL_CARDS.map((card) => (
           <Link
             key={card.id}
             href={card.link}
-            className="group rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-4 sm:p-6 flex flex-col justify-between gap-6 hover:border-[#591623]/40 transition-all shadow-xs"
+            className="group rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-4 sm:p-6 flex flex-col justify-between gap-4 sm:gap-6 hover:border-[#591623]/40 transition-all shadow-xs"
           >
             {/* Padded Rounded Media */}
             <div className="aspect-[16/11] w-full rounded-xl overflow-hidden bg-[#26231F]">

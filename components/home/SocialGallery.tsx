@@ -27,8 +27,8 @@ const SOCIAL_ITEMS = [
 
 export function SocialGallery() {
   return (
-    <section className="bg-[#F2F2F0] py-16 sm:py-22 border-t border-[#26231F]/12">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-10 text-center space-y-2">
+    <section className="bg-[#F2F2F0] py-12 sm:py-22 border-t border-[#26231F]/12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-7 sm:mb-10 text-center space-y-2">
         <span className="text-[11px] tracking-[0.3em] uppercase text-[#8C072B] font-semibold block">
           Community Lookbook
         </span>
@@ -43,11 +43,15 @@ export function SocialGallery() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 px-3 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         {SOCIAL_ITEMS.map((item, idx) => (
           <div
             key={idx}
-            className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-[#26231F] border border-[#26231F]/10 cursor-pointer"
+            className={`group relative rounded-2xl overflow-hidden bg-[#26231F] border border-[#26231F]/10 cursor-pointer ${
+              idx === 0
+                ? "col-span-2 aspect-[16/10] sm:col-span-1 sm:aspect-[4/5]"
+                : "aspect-[4/5]"
+            }`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

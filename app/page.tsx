@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { HeroCollection } from "../components/home/HeroCollection";
 import { DropOffersSection } from "../components/home/DropOffersSection";
 import { PromotionalCampaigns } from "../components/home/PromotionalCampaigns";
@@ -13,6 +14,14 @@ import { NewArrivals } from "../components/home/NewArrivals";
 import { CompleteTheLook } from "../components/home/CompleteTheLook";
 import { ReviewCarousel } from "../components/home/ReviewCarousel";
 import { SocialGallery } from "../components/home/SocialGallery";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "ORIIKO",
+  },
+  description:
+    "ORIIKO is an Indian contemporary streetwear label crafting heavyweight hoodies, embroidered oversized tees, French terry sweatshirts, and elevated essentials.",
+};
 
 export default function HomePage() {
   return (

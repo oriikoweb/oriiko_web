@@ -122,22 +122,22 @@ function ShopContent() {
   ]);
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16">
       {/* 6.1 Collection Header */}
-      <div className="border-b border-[#26231F]/15 pb-10 space-y-4">
+      <div className="border-b border-[#26231F]/15 pb-6 sm:pb-10 space-y-3 sm:space-y-4">
         <nav aria-label="Breadcrumb" className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex items-center gap-2">
           <Link href="/" className="hover:text-[#591623]">Home</Link>
           <span>/</span>
           <span className="text-[#26231F]">Shop</span>
         </nav>
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div>
             <span className="text-[11px] tracking-[0.28em] uppercase text-[#591623] font-semibold block mb-1">
               Drop 01 — 2026
             </span>
             <h1
-              className="text-3xl sm:text-5xl font-serif text-[#26231F] font-normal"
+              className="text-2xl sm:text-5xl font-serif text-[#26231F] font-normal"
               style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
             >
               The Complete Collection
@@ -150,15 +150,16 @@ function ShopContent() {
       </div>
 
       {/* 6.4 Controls Toolbar: Filter Button + Count + Sort Dropdown */}
-      <div className="py-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#26231F]/15">
+      <div className="py-4 sm:py-6 flex flex-wrap items-center justify-between gap-3 sm:gap-4 border-b border-[#26231F]/15">
         {/* Filter toggle */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className="px-4 py-2.5 rounded-lg border border-[#26231F]/20 hover:border-[#591623] hover:text-[#591623] text-xs uppercase tracking-widest font-medium transition-colors flex items-center gap-2.5"
+            className="px-3.5 sm:px-4 py-2 sm:py-2.5 min-h-[40px] rounded-lg border border-[#26231F]/20 hover:border-[#591623] hover:text-[#591623] text-[11px] sm:text-xs uppercase tracking-widest font-medium transition-colors flex items-center gap-2"
           >
             <IconFilter size={15} />
-            <span>Filter Products</span>
+            <span>Filter</span>
+            <span className="hidden sm:inline">Products</span>
             {activeFilterCount > 0 && (
               <span className="w-4 h-4 rounded-full bg-[#8C072B] text-[#F2F2F0] text-[9px] font-bold flex items-center justify-center">
                 {activeFilterCount}
@@ -167,13 +168,13 @@ function ShopContent() {
           </button>
 
           {/* Active count */}
-          <span className="text-xs text-[#26231F]/60">
-            Showing {filteredProducts.length} of {PRODUCTS.length} Products
+          <span className="text-[11px] sm:text-xs text-[#26231F]/60">
+            {filteredProducts.length} / {PRODUCTS.length} Items
           </span>
         </div>
 
         {/* Sort Selector */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <span className="text-xs uppercase tracking-wider text-[#26231F]/60 hidden sm:inline">
             Sort By:
           </span>
@@ -181,7 +182,7 @@ function ShopContent() {
             <select
               value={selectedSort}
               onChange={(e) => setSelectedSort(e.target.value)}
-              className="appearance-none bg-[#F2F2F0] border border-[#26231F]/20 rounded-lg pl-3.5 pr-8 py-2 text-xs uppercase tracking-wider text-[#26231F] focus:outline-none focus:border-[#591623] cursor-pointer"
+              className="appearance-none bg-[#F2F2F0] border border-[#26231F]/20 rounded-lg pl-3 pr-8 py-2 min-h-[40px] text-base sm:text-xs uppercase tracking-wider text-[#26231F] focus:outline-none focus:border-[#591623] cursor-pointer"
             >
               <option value="featured">Featured Drop</option>
               <option value="newest">Newest Arrivals</option>
@@ -351,7 +352,7 @@ function ShopContent() {
         <div className={isFilterOpen ? "lg:col-span-9" : "lg:col-span-12"}>
           {filteredProducts.length > 0 ? (
             <div
-              className={`grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 ${
+              className={`grid grid-cols-2 gap-3.5 sm:gap-6 lg:gap-8 ${
                 isFilterOpen ? "lg:grid-cols-3" : "lg:grid-cols-4"
               }`}
             >
@@ -383,10 +384,10 @@ function ShopContent() {
 
 export default function ShopPage() {
   return (
-    <main className="flex-1 bg-[#F2F2F0] py-10 sm:py-16">
+    <main className="flex-1 bg-[#F2F2F0] py-6 sm:py-16">
       <Suspense
         fallback={
-          <div className="max-w-[1440px] mx-auto px-6 py-24 text-center text-xs tracking-widest uppercase text-[#26231F]/50">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-24 text-center text-xs tracking-widest uppercase text-[#26231F]/50">
             Loading Collection...
           </div>
         }

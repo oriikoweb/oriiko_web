@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { PolicyPageShell } from "../../components/legal/PolicyPageShell";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — ORIIKO",
+  title: "Privacy Policy",
   description:
-    "How ORIIKO collects, protects, and uses personal information across India.",
+    "Learn how ORIIKO India collects, uses, stores, and safeguards your personal data across our streetwear storefront and order deliveries.",
 };
 
 export default function PrivacyPolicyPage() {

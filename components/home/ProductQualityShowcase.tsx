@@ -36,22 +36,22 @@ export function ProductQualityShowcase() {
   return (
     <section
       id="quality"
-      className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-8"
+      className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
     >
-      <div className="rounded-2xl bg-[#591623] text-[#F2F2F0] px-5 sm:px-10 lg:px-12 py-16 sm:py-22 space-y-10">
+      <div className="rounded-2xl bg-[#591623] text-[#F2F2F0] px-4 sm:px-10 lg:px-12 py-12 sm:py-22 space-y-8 sm:space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-2.5">
           <span className="text-[10px] tracking-[0.28em] uppercase text-[#F2F2F0]/75 font-semibold block">
             ORIIKO Standard
           </span>
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-[#F2F2F0]"
+            className="text-2xl sm:text-4xl lg:text-5xl font-serif font-normal text-[#F2F2F0]"
             style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
           >
             Three Pillars Behind Every Drop
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {PILLARS.map((pillar) => (
             <div
               key={pillar.index}

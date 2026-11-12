@@ -18,32 +18,32 @@ export function ReviewCarousel() {
   const activeReview = REVIEWS[activeIdx] || REVIEWS[0];
 
   return (
-    <section id="reviews" className="bg-[#F2F2F0] py-16 sm:py-24 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+    <section id="reviews" className="bg-[#F2F2F0] py-12 sm:py-24 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
       {/* Centered Header & Aggregate Rating */}
-      <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
+      <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-10 space-y-2.5 sm:space-y-3">
         <span className="text-[11px] tracking-[0.28em] uppercase text-[#8C072B] font-semibold block">
           Customer Reviews
         </span>
         <h2
-          className="text-3xl sm:text-4xl font-serif font-normal text-[#26231F]"
+          className="text-2xl sm:text-4xl font-serif font-normal text-[#26231F]"
           style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
         >
           Rated 4.9 / 5 Across India
         </h2>
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#26231F]/15 bg-[#F2F2F0]">
+        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#26231F]/15 bg-[#F2F2F0]">
           <div className="flex text-[#8C072B]">
             {[...Array(5)].map((_, i) => (
               <IconStar key={i} size={13} filled />
             ))}
           </div>
-          <span className="text-xs font-medium text-[#26231F]/80">
+          <span className="text-[11px] sm:text-xs font-medium text-[#26231F]/80">
             Based on 250+ Verified Indian Orders
           </span>
         </div>
       </div>
 
       {/* Centered Editorial Quote Card (Hannovae Testimonial Style) */}
-      <div className="max-w-3xl mx-auto rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-7 sm:p-12 text-center space-y-6 shadow-xs">
+      <div className="max-w-3xl mx-auto rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-6 sm:p-12 text-center space-y-5 sm:space-y-6 shadow-xs">
         <div className="flex items-center justify-center gap-1 text-[#8C072B]">
           {[...Array(activeReview.rating)].map((_, i) => (
             <IconStar key={i} size={15} filled />

@@ -44,12 +44,12 @@ export default function ProductDetailPage({ params }: PageProps) {
   };
 
   return (
-    <main className="flex-1 bg-[#F2F2F0] py-10 sm:py-16">
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
+    <main className="flex-1 bg-[#F2F2F0] py-6 sm:py-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16">
         {/* Breadcrumb Navigation */}
         <nav
           aria-label="Breadcrumbs"
-          className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex items-center gap-2 mb-8"
+          className="text-[10px] sm:text-[11px] tracking-widest uppercase text-[#26231F]/50 flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5 sm:mb-8"
         >
           <Link href="/" className="hover:text-[#591623]">Home</Link>
           <span>/</span>
@@ -65,16 +65,16 @@ export default function ProductDetailPage({ params }: PageProps) {
         </nav>
 
         {/* 7.1 Desktop 2-Column Product Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
           {/* Left Column: 7.2 Product Gallery */}
-          <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4">
+          <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-3 sm:gap-4">
             {/* Thumbnails rail */}
-            <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar">
+            <div className="flex md:flex-col gap-2.5 sm:gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar pb-1 md:pb-0">
               {product.galleryImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setActiveImageIndex(idx)}
-                  className={`w-18 h-24 md:w-22 md:h-28 flex-shrink-0 border rounded-lg overflow-hidden transition-all ${
+                  className={`w-16 h-20 md:w-22 md:h-28 flex-shrink-0 border rounded-lg overflow-hidden transition-all ${
                     activeImageIndex === idx
                       ? "border-[#591623] ring-1 ring-[#591623]"
                       : "border-[#26231F]/15 opacity-60 hover:opacity-100"
@@ -92,7 +92,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             </div>
 
             {/* Main Primary Zoomable Image Stage */}
-            <div className="flex-1 aspect-[3/4] relative bg-[#26231F] border border-[#26231F]/15 rounded-2xl overflow-hidden group">
+            <div className="flex-1 aspect-[4/5] sm:aspect-[3/4] relative bg-[#26231F] border border-[#26231F]/15 rounded-2xl overflow-hidden group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={product.galleryImages[activeImageIndex] || product.primaryImage}
@@ -141,7 +141,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             </div>
 
             {/* Price section */}
-            <div className="flex items-baseline gap-3 pt-2">
+            <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-3 pt-2">
               <span className="text-2xl font-serif text-[#26231F] font-semibold">
                 {formatPrice(product.price)}
               </span>
@@ -150,7 +150,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                   {formatPrice(product.originalPrice)}
                 </span>
               )}
-              <span className="text-[10px] tracking-widest uppercase font-semibold text-[#8C072B] bg-[#8C072B]/10 px-3 py-1 rounded-full ml-2">
+              <span className="text-[10px] tracking-widest uppercase font-semibold text-[#8C072B] bg-[#8C072B]/10 px-3 py-1 rounded-full sm:ml-1">
                 100% Heavyweight Combed Cotton
               </span>
             </div>
@@ -193,12 +193,12 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Quantity Selector & 7.4 Add To Cart Action */}
             <div className="pt-4 space-y-4">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 {/* Quantity */}
-                <div className="flex items-center border border-[#26231F]/20 rounded-full overflow-hidden">
+                <div className="flex items-center justify-between sm:justify-start border border-[#26231F]/20 rounded-full overflow-hidden min-h-[46px]">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="p-3 text-[#26231F] hover:bg-[#26231F]/5 transition-colors focus:outline-none"
+                    className="px-4 py-3 text-[#26231F] hover:bg-[#26231F]/5 transition-colors focus:outline-none"
                     aria-label="Decrease quantity"
                   >
                     <IconMinus size={14} />
@@ -208,7 +208,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                   </span>
                   <button
                     onClick={() => setQuantity((q) => q + 1)}
-                    className="p-3 text-[#26231F] hover:bg-[#26231F]/5 transition-colors focus:outline-none"
+                    className="px-4 py-3 text-[#26231F] hover:bg-[#26231F]/5 transition-colors focus:outline-none"
                     aria-label="Increase quantity"
                   >
                     <IconPlus size={14} />
@@ -219,7 +219,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 <button
                   onClick={() => addToCart(product, currentVariant, quantity)}
                   disabled={!currentVariant.inStock}
-                  className="flex-1 py-4 rounded-full bg-[#591623] hover:bg-[#8C072B] disabled:bg-[#26231F]/20 text-[#F2F2F0] text-xs uppercase tracking-[0.22em] font-medium transition-colors flex items-center justify-center gap-3 shadow-md focus:outline-none"
+                  className="flex-1 py-4 px-5 min-h-[48px] rounded-full bg-[#591623] hover:bg-[#8C072B] disabled:bg-[#26231F]/20 text-[#F2F2F0] text-xs uppercase tracking-[0.2em] sm:tracking-[0.22em] font-medium transition-colors flex items-center justify-center gap-3 shadow-md focus:outline-none"
                 >
                   <IconBag size={16} />
                   <span>
@@ -231,7 +231,7 @@ export default function ProductDetailPage({ params }: PageProps) {
               </div>
 
               {/* Service Badges */}
-              <div className="grid grid-cols-2 gap-3 pt-2 text-[11px] text-[#26231F]/70">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-2 text-[11px] text-[#26231F]/70">
                 <div className="flex items-center gap-2">
                   <IconTruck size={15} className="text-[#591623]" />
                   <span>Free Pan-India Shipping &gt; ₹2,999</span>
@@ -325,8 +325,8 @@ export default function ProductDetailPage({ params }: PageProps) {
         </div>
 
         {/* Related Products Recommendation */}
-        <div className="mt-28 pt-16 border-t border-[#26231F]/15">
-          <div className="mb-10 text-center">
+        <div className="mt-16 sm:mt-28 pt-10 sm:pt-16 border-t border-[#26231F]/15">
+          <div className="mb-7 sm:mb-10 text-center">
             <span className="text-[11px] tracking-[0.28em] uppercase text-[#591623] font-semibold block mb-1">
               More From Drop 01
             </span>
@@ -338,7 +338,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

@@ -37,7 +37,7 @@ export function PromotionalCampaigns() {
           <Link
             key={card.id}
             href={card.link}
-            className="group rounded-2xl border border-[#26231F]/12 bg-[#F2F2F0] p-4 sm:p-6 flex flex-col justify-between gap-4 sm:gap-6 hover:border-[#591623]/40 transition-all shadow-xs"
+            className="group rounded-2xl border border-[#26231F]/12 dark:border-[#F2F2F0]/15 bg-[#F2F2F0] dark:bg-[#F2F2F0]/[0.04] p-4 sm:p-6 flex flex-col justify-between gap-4 sm:gap-6 hover:border-[#591623]/40 dark:hover:border-[#8C072B] transition-all shadow-xs"
           >
             {/* Padded Rounded Media */}
             <div className="aspect-[16/11] w-full rounded-xl overflow-hidden bg-[#26231F]">
@@ -52,21 +52,21 @@ export function PromotionalCampaigns() {
             {/* Bottom Content Row */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1 pb-1">
               <div className="space-y-1.5 max-w-md">
-                <span className="text-[10px] tracking-[0.26em] uppercase text-[#8C072B] font-bold block">
+                <span className="text-[10px] tracking-[0.26em] uppercase text-[#8C072B] dark:text-[#F2F2F0]/75 font-bold block">
                   {card.kicker}
                 </span>
                 <h3
-                  className="text-2xl sm:text-3xl font-serif font-normal text-[#26231F] group-hover:text-[#591623] transition-colors"
+                  className="text-2xl sm:text-3xl font-serif font-normal text-[#26231F] dark:text-[#F2F2F0] group-hover:text-[#591623] dark:group-hover:text-[#F2F2F0]/80 transition-colors"
                   style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
                 >
                   {card.title}
                 </h3>
-                <p className="text-xs text-[#26231F]/70 leading-relaxed font-sans">
+                <p className="text-xs text-[#26231F]/70 dark:text-[#F2F2F0]/70 leading-relaxed font-sans">
                   {card.description}
                 </p>
               </div>
 
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#26231F]/20 group-hover:border-[#591623] group-hover:bg-[#591623] text-[#26231F] group-hover:text-[#F2F2F0] text-[11px] uppercase tracking-[0.18em] font-medium transition-colors flex-shrink-0 self-start sm:self-end">
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#26231F]/20 dark:border-[#F2F2F0]/25 group-hover:border-[#591623] group-hover:bg-[#591623] text-[#26231F] dark:text-[#F2F2F0] group-hover:text-[#F2F2F0] text-[11px] uppercase tracking-[0.18em] font-medium transition-colors flex-shrink-0 self-start sm:self-end">
                 <span>{card.cta}</span>
                 <IconArrowRight size={13} />
               </span>

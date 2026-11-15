@@ -5,7 +5,35 @@ export interface ProductVariant {
   color?: string;
   colorHex?: string;
   inStock: boolean;
+  stock?: number;
   sku?: string;
+}
+
+export interface ProductMediaItem {
+  id?: string;
+  url: string;
+  mediaType: "image" | "video";
+  altText?: string;
+  isPrimary?: boolean;
+}
+
+export interface StoreCollection {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  coverImage?: string | null;
+  season?: string | null;
+  isActive: boolean;
+  sortOrder: number;
+}
+
+export interface StoreSettings {
+  deliveryCharge: number;
+  freeShippingThreshold: number;
+  faviconUrl: string | null;
+  heroVideoUrl?: string | null;
+  updatedAt?: string;
 }
 
 export interface Product {
@@ -13,7 +41,10 @@ export interface Product {
   slug: string;
   name: string;
   collection: string;
-  category: "hoodies" | "t-shirts" | "sweatshirts" | "bottoms" | "accessories";
+  category: string;
+  collectionIds?: string[];
+  collectionSlugs?: string[];
+  collectionNames?: string[];
   price: number;
   originalPrice?: number;
   discountBadge?: string;
@@ -24,6 +55,7 @@ export interface Product {
   primaryImage: string;
   secondaryImage: string;
   galleryImages: string[];
+  media?: ProductMediaItem[];
   variants: ProductVariant[];
   rating: number;
   reviewCount: number;

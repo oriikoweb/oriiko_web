@@ -7,7 +7,7 @@ import { IconArrowRight } from "../ui/Icons";
 export function BrandMission() {
   return (
     <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <div className="rounded-2xl bg-[#26231F] text-[#F2F2F0] py-14 sm:py-28 px-5 sm:px-12 text-center space-y-5 sm:space-y-7">
+      <div className="rounded-2xl bg-[#26231F] dark:border dark:border-[#F2F2F0]/15 text-[#F2F2F0] py-14 sm:py-28 px-5 sm:px-12 text-center space-y-5 sm:space-y-7">
         <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#8C072B]/25 border border-[#8C072B]/40 text-[10px] tracking-[0.28em] uppercase text-[#F2F2F0] font-semibold">
           Built For India
         </span>

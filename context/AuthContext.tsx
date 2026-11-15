@@ -14,7 +14,7 @@ export interface UserProfile {
   full_name: string | null;
   phone: string | null;
   avatar_url: string | null;
-  role: "customer" | "admin" | "editor";
+  role: "customer" | "admin";
   auth_provider: string;
   created_at?: string;
 }

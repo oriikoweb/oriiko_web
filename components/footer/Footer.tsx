@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useStore } from "../../context/StoreContext";
 import {
   IconShield,
   IconTruck,
@@ -22,54 +23,17 @@ interface FooterColumnConfig {
   links: FooterLinkItem[];
 }
 
-const SERVICE_BENEFITS = [
-  {
-    icon: IconTruck,
-    title: "Free Pan-India Shipping",
-    desc: "Express prepaid delivery across India on all orders above ₹2,999.",
-  },
-  {
-    icon: IconRefresh,
-    title: "14-Day Easy Exchanges",
-    desc: "Hassle-free size exchanges and doorstep pickup across serviceable pin codes.",
-  },
-  {
-    icon: IconShield,
-    title: "UPI, Cards & COD Accepted",
-    desc: "Encrypted checkout supporting UPI, Rupay, Visa, Mastercard, and Cash on Delivery.",
-  },
-  {
-    icon: IconUser,
-    title: "India Support Team",
-    desc: "Fast sizing advice and order help directly from our India studio team.",
-  },
-];
-
-const FOOTER_COLUMNS: FooterColumnConfig[] = [
-  {
-    id: "shop",
-    title: "Shop",
-    links: [
-      { label: "All Drops", href: "/shop" },
-      { label: "Heavyweight Hoodies", href: "/shop?category=hoodies" },
-      { label: "Embroidered T-Shirts", href: "/shop?category=t-shirts" },
-      { label: "Sweatshirts & Crewnecks", href: "/shop?category=sweatshirts" },
-      { label: "Cargos & Bottoms", href: "/shop?category=bottoms" },
-      { label: "Caps & Accessories", href: "/shop?category=accessories" },
-    ],
-  },
-  {
-    id: "policies",
-    title: "Policies & Care",
-    links: [
-      { label: "Shipping Policy", href: "/shipping-policy" },
-      { label: "Refunds & Cancellations", href: "/refunds-and-cancellations" },
-      { label: "Privacy Policy", href: "/privacy-policy" },
-      { label: "Terms & Conditions", href: "/terms-and-conditions" },
-      { label: "Member Account", href: "/account" },
-    ],
-  },
-];
+const POLICIES_COLUMN: FooterColumnConfig = {
+  id: "policies",
+  title: "Policies & Care",
+  links: [
+    { label: "Shipping Policy", href: "/shipping-policy" },
+    { label: "Refunds & Cancellations", href: "/refunds-and-cancellations" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms & Conditions", href: "/terms-and-conditions" },
+    { label: "Member Account", href: "/account" },
+  ],
+};
 
 const LEGAL_BAR_LINKS: FooterLinkItem[] = [
   { label: "Refunds & Cancellations", href: "/refunds-and-cancellations" },
@@ -142,11 +106,53 @@ function FooterLinkColumn({
  * and the full editorial showcase on tablet and desktop viewports.
  */
 export function Footer() {
+  const { collections, freeShippingThreshold, formatPrice } = useStore();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [openMobileSection, setOpenMobileSection] = useState<FooterColumnConfig["id"] | null>(
     null
   );
+
+  const SERVICE_BENEFITS = [
+    {
+      icon: IconTruck,
+      title: "Free Pan-India Shipping",
+      desc:
+        freeShippingThreshold <= 0
+          ? "Express prepaid delivery across India on all orders."
+          : `Express prepaid delivery across India on all orders above ${formatPrice(freeShippingThreshold)}.`,
+    },
+    {
+      icon: IconRefresh,
+      title: "14-Day Easy Exchanges",
+      desc: "Hassle-free size exchanges and doorstep pickup across serviceable pin codes.",
+    },
+    {
+      icon: IconShield,
+      title: "UPI, Cards & COD Accepted",
+      desc: "Encrypted checkout supporting UPI, Rupay, Visa, Mastercard, and Cash on Delivery.",
+    },
+    {
+      icon: IconUser,
+      title: "India Support Team",
+      desc: "Fast sizing advice and order help directly from our India studio team.",
+    },
+  ];
+
+  const FOOTER_COLUMNS: FooterColumnConfig[] = [
+    {
+      id: "shop",
+      title: "Collections",
+      links: [
+        { label: "All Drops", href: "/shop" },
+        ...collections.map((c) => ({
+          label: c.name,
+          href: `/shop?collection=${encodeURIComponent(c.slug)}`,
+        })),
+      ],
+    },
+    POLICIES_COLUMN,
+  ];
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -163,7 +169,7 @@ export function Footer() {
   return (
     <footer
       id="footer"
-      className="bg-[#591623] text-[#F2F2F0] border-t border-[#26231F]/30 selection:bg-[#8C072B] selection:text-[#F2F2F0]"
+      className="bg-[#591623] text-[#F2F2F0] border-t border-[#26231F]/30 dark:border-[#F2F2F0]/15 selection:bg-[#8C072B] selection:text-[#F2F2F0]"
     >
       {/* Service Benefits Row (hidden on mobile to keep the mobile footer minimal) */}
       <div className="hidden md:block border-b border-[#F2F2F0]/15">

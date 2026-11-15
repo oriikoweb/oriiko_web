@@ -16,6 +16,7 @@ export function CartDrawer() {
     updateQuantity,
     cartSubtotal,
     cartCount,
+    deliveryCharge,
     freeShippingThreshold,
     freeShippingProgress,
     formatPrice,
@@ -110,7 +111,7 @@ export function CartDrawer() {
   const discountAmount = appliedDiscount ? cartSubtotal * appliedDiscount : 0;
   const finalTotal = Math.max(0, cartSubtotal - discountAmount);
   const remainingForFreeShipping = Math.max(0, freeShippingThreshold - cartSubtotal);
-  const shippingCost = remainingForFreeShipping === 0 ? 0 : 149;
+  const shippingCost = remainingForFreeShipping === 0 ? 0 : deliveryCharge;
 
   const swipeFadeProgress =
     isCartOpen && isDragging && activeDragX > 0
@@ -150,24 +151,24 @@ export function CartDrawer() {
               ? "none"
               : `transform 400ms ${NATIVE_SPRING}`,
           }}
-          className="w-[88vw] max-w-[390px] sm:max-w-md bg-[#F2F2F0] text-[#26231F] flex flex-col justify-between shadow-2xl border-l border-[#26231F]/15 rounded-l-2xl overflow-hidden will-change-transform touch-pan-y"
+          className="w-[88vw] max-w-[390px] sm:max-w-md bg-[#F2F2F0] dark:bg-[#26231F] text-[#26231F] dark:text-[#F2F2F0] flex flex-col justify-between shadow-2xl border-l border-[#26231F]/15 dark:border-[#F2F2F0]/15 rounded-l-2xl overflow-hidden will-change-transform touch-pan-y"
         >
           {/* Top Bar */}
-          <div className="px-5 py-4 sm:p-7 border-b border-[#26231F]/10 flex items-center justify-between shrink-0">
+          <div className="px-5 py-4 sm:p-7 border-b border-[#26231F]/10 dark:border-[#F2F2F0]/10 flex items-center justify-between shrink-0">
             <div className="flex items-baseline gap-2.5">
               <h2
-                className="text-xl sm:text-2xl font-serif tracking-wide text-[#26231F]"
+                className="text-xl sm:text-2xl font-serif tracking-wide text-[#26231F] dark:text-[#F2F2F0]"
                 style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
               >
                 Shopping Bag
               </h2>
-              <span className="text-xs uppercase tracking-widest text-[#26231F]/60">
+              <span className="text-xs uppercase tracking-widest text-[#26231F]/60 dark:text-[#F2F2F0]/60">
                 ({cartCount})
               </span>
             </div>
             <button
               onClick={() => setIsCartOpen(false)}
-              className="p-2.5 -mr-2 rounded-full text-[#26231F] hover:text-[#591623] hover:bg-[#26231F]/5 active:scale-95 transition-all focus:outline-none cursor-pointer"
+              className="p-2.5 -mr-2 rounded-full text-[#26231F] dark:text-[#F2F2F0] hover:text-[#591623] dark:hover:text-[#F2F2F0]/75 hover:bg-[#26231F]/5 dark:hover:bg-[#F2F2F0]/10 active:scale-95 transition-all focus:outline-none cursor-pointer"
               aria-label="Close Bag"
             >
               <IconClose size={20} />
@@ -175,33 +176,33 @@ export function CartDrawer() {
           </div>
 
           {/* Free Pan-India Shipping Progress Banner */}
-          <div className="bg-[#591623]/5 px-5 sm:px-7 py-3 border-b border-[#26231F]/10 shrink-0">
-            <div className="flex justify-between items-center gap-2 text-[11px] tracking-wider uppercase font-medium text-[#26231F]">
+          <div className="bg-[#591623]/5 dark:bg-[#591623]/25 px-5 sm:px-7 py-3 border-b border-[#26231F]/10 dark:border-[#F2F2F0]/10 shrink-0">
+            <div className="flex justify-between items-center gap-2 text-[11px] tracking-wider uppercase font-medium text-[#26231F] dark:text-[#F2F2F0]">
               <span className="truncate">
                 {remainingForFreeShipping > 0
                   ? `Add ${formatPrice(remainingForFreeShipping)} for free pan-India shipping`
                   : "Free pan-India express shipping unlocked"}
               </span>
-              <span className="font-semibold text-[#591623] shrink-0">
+              <span className="font-semibold text-[#591623] dark:text-[#F2F2F0] shrink-0">
                 {freeShippingProgress}%
               </span>
             </div>
-            <div className="w-full bg-[#26231F]/10 h-1 mt-2 rounded-full overflow-hidden">
+            <div className="w-full bg-[#26231F]/10 dark:bg-[#F2F2F0]/15 h-1 mt-2 rounded-full overflow-hidden">
               <div
-                className="bg-[#591623] h-full transition-all duration-500 ease-out"
+                className="bg-[#591623] dark:bg-[#8C072B] h-full transition-all duration-500 ease-out"
                 style={{ width: `${freeShippingProgress}%` }}
               />
             </div>
           </div>
 
           {/* Item List */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 sm:p-7 no-scrollbar divide-y divide-[#26231F]/10">
+          <div className="flex-1 overflow-y-auto px-5 py-4 sm:p-7 no-scrollbar divide-y divide-[#26231F]/10 dark:divide-[#F2F2F0]/10">
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12 sm:py-16 space-y-4">
-                <span className="font-serif text-3xl text-[#26231F]/40 italic">
+                <span className="font-serif text-3xl text-[#26231F]/40 dark:text-[#F2F2F0]/40 italic">
                   Empty
                 </span>
-                <p className="text-xs sm:text-sm text-[#26231F]/70 max-w-xs font-sans">
+                <p className="text-xs sm:text-sm text-[#26231F]/70 dark:text-[#F2F2F0]/70 max-w-xs font-sans">
                   Your shopping bag is currently empty. Explore our latest hoodies, embroidered tees, and sweatshirts.
                 </p>
                 <Link
@@ -216,7 +217,7 @@ export function CartDrawer() {
             ) : (
               cart.map((item) => (
                 <div key={item.id} className="py-5 first:pt-1 last:pb-1 flex gap-3.5 sm:gap-4">
-                  <div className="w-18 h-24 sm:w-20 sm:h-28 bg-[#F2F2F0] border border-[#26231F]/10 rounded-xl flex-shrink-0 overflow-hidden relative">
+                  <div className="w-18 h-24 sm:w-20 sm:h-28 bg-[#F2F2F0] dark:bg-[#F2F2F0]/5 border border-[#26231F]/10 dark:border-[#F2F2F0]/15 rounded-xl flex-shrink-0 overflow-hidden relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.product.primaryImage}
@@ -231,24 +232,24 @@ export function CartDrawer() {
                         <Link
                           href={`/product/${item.product.slug}`}
                           onClick={() => setIsCartOpen(false)}
-                          className="text-sm font-serif hover:text-[#591623] transition-colors leading-snug line-clamp-1"
+                          className="text-sm font-serif hover:text-[#591623] dark:hover:text-[#F2F2F0]/75 transition-colors leading-snug line-clamp-1"
                         >
                           {item.product.name}
                         </Link>
-                        <span className="text-xs font-semibold text-[#26231F] flex-shrink-0">
+                        <span className="text-xs font-semibold text-[#26231F] dark:text-[#F2F2F0] flex-shrink-0">
                           {formatPrice(item.product.price * item.quantity)}
                         </span>
                       </div>
-                      <span className="text-[11px] text-[#26231F]/60 block mt-1 tracking-wide">
+                      <span className="text-[11px] text-[#26231F]/60 dark:text-[#F2F2F0]/60 block mt-1 tracking-wide">
                         Option: {item.selectedVariant.name}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between pt-3">
-                      <div className="flex items-center border border-[#26231F]/20 rounded-lg overflow-hidden">
+                      <div className="flex items-center border border-[#26231F]/20 dark:border-[#F2F2F0]/20 rounded-lg overflow-hidden">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-2 sm:p-1.5 text-[#26231F] hover:bg-[#26231F]/5 transition-colors focus:outline-none cursor-pointer"
+                          className="p-2 sm:p-1.5 text-[#26231F] dark:text-[#F2F2F0] hover:bg-[#26231F]/5 dark:hover:bg-[#F2F2F0]/10 transition-colors focus:outline-none cursor-pointer"
                           aria-label="Decrease quantity"
                         >
                           <IconMinus size={13} />
@@ -258,7 +259,7 @@ export function CartDrawer() {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-2 sm:p-1.5 text-[#26231F] hover:bg-[#26231F]/5 transition-colors focus:outline-none cursor-pointer"
+                          className="p-2 sm:p-1.5 text-[#26231F] dark:text-[#F2F2F0] hover:bg-[#26231F]/5 dark:hover:bg-[#F2F2F0]/10 transition-colors focus:outline-none cursor-pointer"
                           aria-label="Increase quantity"
                         >
                           <IconPlus size={13} />
@@ -267,7 +268,7 @@ export function CartDrawer() {
 
                       <button
                         onClick={() => removeFromCart(item.id)}
-                        className="text-[11px] tracking-wider uppercase text-[#26231F]/50 hover:text-[#8C072B] transition-colors underline underline-offset-4 py-1 cursor-pointer"
+                        className="text-[11px] tracking-wider uppercase text-[#26231F]/50 dark:text-[#F2F2F0]/55 hover:text-[#8C072B] dark:hover:text-[#F2F2F0] transition-colors underline underline-offset-4 py-1 cursor-pointer"
                       >
                         Remove
                       </button>
@@ -280,51 +281,51 @@ export function CartDrawer() {
 
           {/* Footer with Calculations and Checkout CTA */}
           {cart.length > 0 && (
-            <div className="p-5 sm:p-7 border-t border-[#26231F]/15 bg-[#F2F2F0] space-y-3.5 sm:space-y-4 shrink-0">
+            <div className="p-5 sm:p-7 border-t border-[#26231F]/15 dark:border-[#F2F2F0]/15 bg-[#F2F2F0] dark:bg-[#26231F] space-y-3.5 sm:space-y-4 shrink-0">
               <form onSubmit={handleApplyDiscount} className="flex gap-2">
                 <input
                   type="text"
                   value={discountCode}
                   onChange={(e) => setDiscountCode(e.target.value)}
                   placeholder="Promo code (try: ORIIKO10)"
-                  className="min-w-0 flex-1 bg-transparent border border-[#26231F]/20 rounded-lg px-3 py-2 text-base sm:text-xs uppercase tracking-wider placeholder:text-[#26231F]/40 focus:outline-none focus:border-[#591623]"
+                  className="min-w-0 flex-1 bg-transparent border border-[#26231F]/20 dark:border-[#F2F2F0]/20 rounded-lg px-3 py-2 text-base sm:text-xs uppercase tracking-wider text-[#26231F] dark:text-[#F2F2F0] placeholder:text-[#26231F]/40 dark:placeholder:text-[#F2F2F0]/40 focus:outline-none focus:border-[#591623] dark:focus:border-[#F2F2F0]"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 min-h-[40px] rounded-lg border border-[#591623] text-[#591623] text-xs uppercase tracking-wider font-medium hover:bg-[#591623] hover:text-[#F2F2F0] transition-colors shrink-0 cursor-pointer"
+                  className="px-4 py-2 min-h-[40px] rounded-lg border border-[#591623] dark:border-[#F2F2F0]/35 text-[#591623] dark:text-[#F2F2F0] text-xs uppercase tracking-wider font-medium hover:bg-[#591623] hover:text-[#F2F2F0] dark:hover:border-[#591623] transition-colors shrink-0 cursor-pointer"
                 >
                   Apply
                 </button>
               </form>
               {discountError && (
-                <p className="text-[11px] text-[#8C072B]">{discountError}</p>
+                <p className="text-[11px] text-[#8C072B] dark:text-[#F2F2F0]">{discountError}</p>
               )}
               {appliedDiscount && (
-                <p className="text-[11px] text-[#591623] font-medium">
+                <p className="text-[11px] text-[#591623] dark:text-[#F2F2F0] font-medium">
                   10% ORIIKO Drop Discount Applied (-{formatPrice(discountAmount)})
                 </p>
               )}
 
               <div className="space-y-1.5 text-xs">
-                <div className="flex justify-between text-[#26231F]/70">
+                <div className="flex justify-between text-[#26231F]/70 dark:text-[#F2F2F0]/70">
                   <span>Subtotal</span>
                   <span>{formatPrice(cartSubtotal)}</span>
                 </div>
                 {appliedDiscount && (
-                  <div className="flex justify-between text-[#8C072B]">
+                  <div className="flex justify-between text-[#8C072B] dark:text-[#F2F2F0]">
                     <span>Discount</span>
                     <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-[#26231F]/70">
+                <div className="flex justify-between text-[#26231F]/70 dark:text-[#F2F2F0]/70">
                   <span>Pan-India Shipping</span>
                   <span>
                     {shippingCost === 0 ? "Free" : formatPrice(shippingCost)}
                   </span>
                 </div>
-                <div className="flex justify-between text-base font-serif pt-2 border-t border-[#26231F]/10 text-[#26231F]">
+                <div className="flex justify-between text-base font-serif pt-2 border-t border-[#26231F]/10 dark:border-[#F2F2F0]/10 text-[#26231F] dark:text-[#F2F2F0]">
                   <span>Total</span>
-                  <span className="font-semibold text-[#591623]">
+                  <span className="font-semibold text-[#591623] dark:text-[#F2F2F0]">
                     {formatPrice(finalTotal + shippingCost)}
                   </span>
                 </div>
@@ -342,7 +343,7 @@ export function CartDrawer() {
 
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="w-full text-center text-xs tracking-wider uppercase text-[#26231F]/70 hover:text-[#591623] transition-colors py-1 cursor-pointer"
+                className="w-full text-center text-xs tracking-wider uppercase text-[#26231F]/70 dark:text-[#F2F2F0]/70 hover:text-[#591623] dark:hover:text-[#F2F2F0] transition-colors py-1 cursor-pointer"
               >
                 Continue Shopping
               </button>

@@ -19,19 +19,19 @@ export function FeaturedCollectionBanner() {
         <div className="absolute inset-0 bg-[#26231F]/50" />
       </div>
 
-      {/* Center Content Box adhering to Off-White surface */}
-      <div className="relative z-10 max-w-2xl bg-[#F2F2F0] p-8 sm:p-12 lg:p-14 text-center border border-[#26231F]/15 shadow-2xl space-y-4">
-        <span className="text-[11px] tracking-[0.3em] uppercase text-[#8C072B] font-semibold block">
+      {/* Center Content Box adhering to Off-White / Dark Charcoal surface */}
+      <div className="relative z-10 max-w-2xl bg-[#F2F2F0] dark:bg-[#26231F] p-8 sm:p-12 lg:p-14 text-center border border-[#26231F]/15 dark:border-[#F2F2F0]/15 shadow-2xl space-y-4">
+        <span className="text-[11px] tracking-[0.3em] uppercase text-[#8C072B] dark:text-[#F2F2F0]/75 font-semibold block">
           Drop 01 Release
         </span>
         <h2
-          className="text-2xl sm:text-4xl font-serif text-[#26231F] leading-tight"
+          className="text-2xl sm:text-4xl font-serif text-[#26231F] dark:text-[#F2F2F0] leading-tight"
           style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
         >
           Heavyweight Fleece & Embroidered Tees
         </h2>
-        <div className="w-10 h-[1.5px] bg-[#591623] mx-auto my-3" />
-        <p className="text-xs sm:text-sm text-[#26231F]/75 leading-relaxed font-sans max-w-lg mx-auto">
+        <div className="w-10 h-[1.5px] bg-[#591623] dark:bg-[#8C072B] mx-auto my-3" />
+        <p className="text-xs sm:text-sm text-[#26231F]/75 dark:text-[#F2F2F0]/75 leading-relaxed font-sans max-w-lg mx-auto">
           Boxy proportions, dense combed cotton fleece, and intricate chain-stitch embroidery engineered for everyday wear across India.
         </p>
         <div className="pt-4 flex justify-center">

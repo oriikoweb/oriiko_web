@@ -14,7 +14,7 @@ export function DropOffersSection() {
         {/* Left Card — Offers & Value Breakdown */}
         <Link
           href="/shop"
-          className="group relative grid grid-cols-1 sm:grid-cols-12 rounded-2xl overflow-hidden border border-[#26231F]/12 bg-[#F2F2F0] shadow-xs hover:border-[#591623]/35 transition-all"
+          className="group relative grid grid-cols-1 sm:grid-cols-12 rounded-2xl overflow-hidden border border-[#26231F]/12 dark:border-[#F2F2F0]/15 bg-[#F2F2F0] dark:bg-[#F2F2F0]/[0.04] shadow-xs hover:border-[#591623]/35 dark:hover:border-[#8C072B] transition-all"
         >
           <div className="sm:col-span-5 relative aspect-[16/10] sm:aspect-auto min-h-[190px] sm:min-h-[220px] bg-[#26231F] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,21 +27,21 @@ export function DropOffersSection() {
 
           <div className="sm:col-span-7 p-5 sm:p-8 flex flex-col justify-center space-y-3.5 sm:space-y-4">
             <div className="space-y-1.5">
-              <span className="text-[10px] tracking-[0.22em] uppercase text-[#26231F]/55 font-semibold block">
+              <span className="text-[10px] tracking-[0.22em] uppercase text-[#26231F]/55 dark:text-[#F2F2F0]/60 font-semibold block">
                 Drop 01 &middot; Value
               </span>
               <h2
-                className="text-2xl sm:text-3xl font-serif font-normal text-[#26231F] leading-none"
+                className="text-2xl sm:text-3xl font-serif font-normal text-[#26231F] dark:text-[#F2F2F0] leading-none"
                 style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
               >
                 Stack more, save cleanly.
               </h2>
             </div>
 
-            <ul className="divide-y divide-[#26231F]/12 text-xs text-[#26231F]/70 space-y-2.5">
+            <ul className="divide-y divide-[#26231F]/12 dark:divide-[#F2F2F0]/12 text-xs text-[#26231F]/70 dark:text-[#F2F2F0]/70 space-y-2.5">
               <li className="pt-2.5 first:pt-0 space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-semibold text-[#26231F] text-sm">
+                  <span className="font-semibold text-[#26231F] dark:text-[#F2F2F0] text-sm">
                     10% Off Any Order
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#8C072B] text-[#F2F2F0] text-[9px] font-bold tracking-[0.14em] uppercase">
@@ -53,7 +53,7 @@ export function DropOffersSection() {
 
               <li className="pt-2.5 space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-semibold text-[#26231F] text-sm">
+                  <span className="font-semibold text-[#26231F] dark:text-[#F2F2F0] text-sm">
                     Free Pan-India Express Shipping
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#591623] text-[#F2F2F0] text-[9px] font-bold tracking-[0.14em] uppercase">
@@ -64,7 +64,7 @@ export function DropOffersSection() {
               </li>
 
               <li className="pt-2.5 space-y-1">
-                <span className="font-semibold text-[#26231F] text-sm block">
+                <span className="font-semibold text-[#26231F] dark:text-[#F2F2F0] text-sm block">
                   UPI, Cards &amp; COD Accepted
                 </span>
                 <p>Pay prepaid via UPI or choose Cash on Delivery at doorstep.</p>
@@ -72,7 +72,7 @@ export function DropOffersSection() {
             </ul>
 
             <div className="pt-1">
-              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#26231F] group-hover:bg-[#591623] text-[#F2F2F0] text-[11px] uppercase tracking-[0.18em] font-semibold transition-colors">
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#26231F] dark:bg-[#591623] group-hover:bg-[#591623] dark:group-hover:bg-[#8C072B] text-[#F2F2F0] text-[11px] uppercase tracking-[0.18em] font-semibold transition-colors">
                 <span>Shop Essentials</span>
                 <IconArrowRight size={13} />
               </span>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PRODUCTS } from "../../../data/products";
+import { fetchStoreBootstrap } from "@/lib/store/server";
 
 export async function generateMetadata({
   params,
@@ -7,13 +7,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = PRODUCTS.find((item) => item.slug === slug);
+  const { products } = await fetchStoreBootstrap();
+  const product = products.find((item) => item.slug === slug);
 
   if (!product) {
     return {
-      title: "Product Not Found",
+      title: "Product Details",
       description:
-        "This ORIIKO piece could not be located. Browse our latest streetwear drops across India.",
+        "Browse ORIIKO heavyweight streetwear essentials across India.",
     };
   }
 
@@ -25,21 +26,22 @@ export async function generateMetadata({
     openGraph: {
       title: `${seoTitle} — ORIIKO`,
       description: product.description,
-      images: [
-        {
-          url: product.primaryImage,
-          alt: product.name,
-        },
-      ],
+      images: product.primaryImage
+        ? [
+            {
+              url: product.primaryImage,
+              alt: product.name,
+            },
+          ]
+        : [],
     },
   };
 }
 
-export default function ProductDetailLayout({
+export default function ProductLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return children;
 }
-

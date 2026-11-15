@@ -10,7 +10,7 @@ import { IconArrowRight, IconLogOut, IconBag } from "../../components/ui/Icons";
 
 export default function AccountPage() {
   const { user, profile, loading, signOut } = useAuth();
-  const { triggerToast } = useStore();
+  const { triggerToast, freeShippingThreshold, formatPrice } = useStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function AccountPage() {
   if (loading || !user) {
     return (
       <AuthShell mode="storefront" eyebrow="Account" title="Verifying Session">
-        <div className="py-8 text-center text-xs text-[#26231F]/60 font-sans tracking-wider uppercase">
+        <div className="py-8 text-center text-xs text-[#26231F]/60 dark:text-[#F2F2F0]/60 font-sans tracking-wider uppercase">
           Loading Profile...
         </div>
       </AuthShell>
@@ -42,11 +42,7 @@ export default function AccountPage() {
   ).toUpperCase();
 
   const roleLabel =
-    profile?.role === "admin"
-      ? "ORIIKO Admin"
-      : profile?.role === "editor"
-        ? "ORIIKO Editor"
-        : "Member Account";
+    profile?.role === "admin" ? "ORIIKO Admin" : "Member Account";
 
   return (
     <AuthShell
@@ -57,29 +53,30 @@ export default function AccountPage() {
     >
       <div className="space-y-6">
         {/* Monogram Header */}
-        <div className="flex items-center justify-between pb-5 border-b border-[#26231F]/10">
+        <div className="flex items-center justify-between pb-5 border-b border-[#26231F]/10 dark:border-[#F2F2F0]/10">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#26231F]/55 block font-sans">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#26231F]/55 dark:text-[#F2F2F0]/55 block font-sans">
               Status
             </span>
-            <p className="text-xs font-medium text-[#591623] uppercase tracking-wider">
+            <p className="text-xs font-medium text-[#591623] dark:text-[#F2F2F0] uppercase tracking-wider">
               Active Session
             </p>
           </div>
-          <div className="w-11 h-11 rounded-full bg-[#591623]/10 text-[#591623] border border-[#591623]/25 flex items-center justify-center font-serif text-lg">
+          <div className="w-11 h-11 rounded-full bg-[#591623]/10 dark:bg-[#591623]/40 text-[#591623] dark:text-[#F2F2F0] border border-[#591623]/25 dark:border-[#8C072B]/60 flex items-center justify-center font-serif text-lg">
             {initial}
           </div>
         </div>
 
         {/* Account Details */}
         <div className="space-y-3 text-xs font-sans">
-          <div className="p-4 rounded-xl border border-[#26231F]/12 space-y-1">
-            <span className="text-[10px] uppercase tracking-widest text-[#26231F]/50 block">
+          <div className="p-4 rounded-xl border border-[#26231F]/12 dark:border-[#F2F2F0]/15 space-y-1">
+            <span className="text-[10px] uppercase tracking-widest text-[#26231F]/50 dark:text-[#F2F2F0]/55 block">
               Member Benefits
             </span>
-            <p className="text-[#26231F] leading-relaxed">
-              Free pan-India express shipping on orders above ₹2,999 and early
-              access to new drops.
+            <p className="text-[#26231F] dark:text-[#F2F2F0] leading-relaxed">
+              {freeShippingThreshold <= 0
+                ? "Free pan-India express shipping on all orders and early access to new drops."
+                : `Free pan-India express shipping on orders above ${formatPrice(freeShippingThreshold)} and early access to new drops.`}
             </p>
           </div>
         </div>
@@ -103,7 +100,7 @@ export default function AccountPage() {
           <button
             type="button"
             onClick={handleSignOut}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-[#8C072B]/35 text-[#8C072B] hover:bg-[#8C072B] hover:text-[#F2F2F0] text-xs uppercase tracking-[0.2em] font-medium transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-[#8C072B]/35 dark:border-[#8C072B]/70 text-[#8C072B] dark:text-[#F2F2F0] hover:bg-[#8C072B] hover:text-[#F2F2F0] text-xs uppercase tracking-[0.2em] font-medium transition-colors cursor-pointer"
           >
             <IconLogOut size={15} />
             <span>Sign Out</span>

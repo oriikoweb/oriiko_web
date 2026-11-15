@@ -22,8 +22,8 @@ function AuthRedirectContent() {
   }, [loading, user, searchParams, router]);
 
   return (
-    <main className="min-h-[100dvh] bg-[#F2F2F0] flex items-center justify-center px-4">
-      <span className="text-[11px] uppercase tracking-[0.22em] text-[#26231F]/55 font-sans">
+    <main className="min-h-[100dvh] bg-[#F2F2F0] dark:bg-[#26231F] flex items-center justify-center px-4">
+      <span className="text-[11px] uppercase tracking-[0.22em] text-[#26231F]/55 dark:text-[#F2F2F0]/60 font-sans">
         Redirecting...
       </span>
     </main>
@@ -32,7 +32,7 @@ function AuthRedirectContent() {
 
 export default function AuthRedirectPage() {
   return (
-    <Suspense fallback={<div className="min-h-[100dvh] bg-[#F2F2F0]" />}>
+    <Suspense fallback={<div className="min-h-[100dvh] bg-[#F2F2F0] dark:bg-[#26231F]" />}>
       <AuthRedirectContent />
     </Suspense>
   );

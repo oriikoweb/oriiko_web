@@ -5,47 +5,53 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ProductCard } from "../../components/product/ProductCard";
 import { IconFilter, IconClose, IconChevronDown } from "../../components/ui/Icons";
-import { PRODUCTS } from "../../data/products";
-
-const CATEGORIES = [
-  { label: "All Drops", value: "all" },
-  { label: "Hoodies", value: "hoodies" },
-  { label: "Embroidered T-Shirts", value: "t-shirts" },
-  { label: "Sweatshirts", value: "sweatshirts" },
-  { label: "Cargos & Bottoms", value: "bottoms" },
-  { label: "Caps & Accessories", value: "accessories" },
-];
-
-const SIZES = ["XS", "S", "M", "L", "XL", "28", "30", "32", "34", "One Size"];
-
-const COLORS = [
-  { name: "Dark Charcoal", hex: "#26231F" },
-  { name: "Deep Burgundy", hex: "#591623" },
-  { name: "Rich Burgundy", hex: "#8C072B" },
-  { name: "Off-White", hex: "#F2F2F0" },
-];
+import { useStore } from "../../context/StoreContext";
 
 function ShopContent() {
+  const { products, collections, catalogLoading } = useStore();
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || "all";
+  const initialCollection =
+    searchParams.get("collection") || searchParams.get("category") || "all";
   const initialSort = searchParams.get("sort") || "featured";
   const initialSearch = searchParams.get("search") || "";
 
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedCollection, setSelectedCollection] =
+    useState(initialCollection);
   const [selectedSort, setSelectedSort] = useState(initialSort);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [maxPrice, setMaxPrice] = useState<number>(5000);
+  const [maxPrice, setMaxPrice] = useState<number>(10000);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Toggle size
+  const availableSizes = useMemo(() => {
+    const set = new Set<string>();
+    products.forEach((p) => p.availableSizes.forEach((s) => set.add(s)));
+    return Array.from(set);
+  }, [products]);
+
+  const availableColors = useMemo(() => {
+    const map = new Map<string, string>();
+    products.forEach((p) =>
+      p.availableColors.forEach((c) => {
+        if (!map.has(c.name)) map.set(c.name, c.hex);
+      })
+    );
+    return Array.from(map.entries()).map(([name, hex]) => ({ name, hex }));
+  }, [products]);
+
+  const priceCeiling = useMemo(() => {
+    const highest = products.reduce((max, p) => Math.max(max, p.price), 5000);
+    return Math.ceil(highest / 500) * 500;
+  }, [products]);
+
+  const effectiveMaxPrice = Math.min(maxPrice, priceCeiling);
+
   const toggleSize = (size: string) => {
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
     );
   };
 
-  // Toggle color
   const toggleColor = (color: string) => {
     setSelectedColors((prev) =>
       prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
@@ -53,80 +59,100 @@ function ShopContent() {
   };
 
   const clearAllFilters = () => {
-    setSelectedCategory("all");
+    setSelectedCollection("all");
     setSelectedSizes([]);
     setSelectedColors([]);
-    setMaxPrice(5000);
+    setMaxPrice(priceCeiling);
   };
 
   const activeFilterCount =
-    (selectedCategory !== "all" ? 1 : 0) +
+    (selectedCollection !== "all" ? 1 : 0) +
     selectedSizes.length +
     selectedColors.length +
-    (maxPrice < 5000 ? 1 : 0);
+    (effectiveMaxPrice < priceCeiling ? 1 : 0);
 
-  // Filter & Sort calculation
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
-      // Search
-      if (initialSearch) {
-        const q = initialSearch.toLowerCase();
-        const matches =
-          product.name.toLowerCase().includes(q) ||
-          product.category.toLowerCase().includes(q) ||
-          product.materials.toLowerCase().includes(q);
-        if (!matches) return false;
-      }
+    return products
+      .filter((product) => {
+        if (initialSearch) {
+          const q = initialSearch.toLowerCase();
+          const matches =
+            product.name.toLowerCase().includes(q) ||
+            product.category.toLowerCase().includes(q) ||
+            product.materials.toLowerCase().includes(q) ||
+            (product.collectionNames ?? []).some((n) =>
+              n.toLowerCase().includes(q)
+            );
+          if (!matches) return false;
+        }
 
-      // Category
-      if (selectedCategory !== "all" && product.category !== selectedCategory) {
-        return false;
-      }
+        if (selectedCollection !== "all") {
+          const matchesSlug = (product.collectionSlugs ?? []).includes(
+            selectedCollection
+          );
+          const matchesId = (product.collectionIds ?? []).includes(
+            selectedCollection
+          );
+          const matchesLegacyCategory =
+            product.category.toLowerCase() === selectedCollection.toLowerCase();
+          if (!matchesSlug && !matchesId && !matchesLegacyCategory) {
+            return false;
+          }
+        }
 
-      // Max price
-      if (product.price > maxPrice) {
-        return false;
-      }
+        if (product.price > effectiveMaxPrice) {
+          return false;
+        }
 
-      // Sizes
-      if (selectedSizes.length > 0) {
-        const hasSize = product.availableSizes.some((s) =>
-          selectedSizes.includes(s)
-        );
-        if (!hasSize) return false;
-      }
+        if (selectedSizes.length > 0) {
+          const hasSize = product.availableSizes.some((s) =>
+            selectedSizes.includes(s)
+          );
+          if (!hasSize) return false;
+        }
 
-      // Colors
-      if (selectedColors.length > 0) {
-        const hasColor = product.availableColors.some((c) =>
-          selectedColors.includes(c.name)
-        );
-        if (!hasColor) return false;
-      }
+        if (selectedColors.length > 0) {
+          const hasColor = product.availableColors.some((c) =>
+            selectedColors.includes(c.name)
+          );
+          if (!hasColor) return false;
+        }
 
-      return true;
-    }).sort((a, b) => {
-      if (selectedSort === "price-asc") return a.price - b.price;
-      if (selectedSort === "price-desc") return b.price - a.price;
-      if (selectedSort === "newest") return (b.isNewArrival ? 1 : 0) - (a.isNewArrival ? 1 : 0);
-      if (selectedSort === "bestselling") return (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0);
-      return 0; // featured default
-    });
+        return true;
+      })
+      .sort((a, b) => {
+        if (selectedSort === "price-asc") return a.price - b.price;
+        if (selectedSort === "price-desc") return b.price - a.price;
+        if (selectedSort === "newest")
+          return (b.isNewArrival ? 1 : 0) - (a.isNewArrival ? 1 : 0);
+        if (selectedSort === "bestselling")
+          return (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0);
+        return 0;
+      });
   }, [
+    products,
     initialSearch,
-    selectedCategory,
+    selectedCollection,
     selectedSort,
     selectedSizes,
     selectedColors,
-    maxPrice,
+    effectiveMaxPrice,
   ]);
+
+  const activeCollectionObj = collections.find(
+    (c) => c.slug === selectedCollection || c.id === selectedCollection
+  );
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16">
-      {/* 6.1 Collection Header */}
       <div className="border-b border-[#26231F]/15 pb-6 sm:pb-10 space-y-3 sm:space-y-4">
-        <nav aria-label="Breadcrumb" className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex items-center gap-2">
-          <Link href="/" className="hover:text-[#591623]">Home</Link>
+        <nav
+          aria-label="Breadcrumb"
+          className="text-[11px] tracking-widest uppercase text-[#26231F]/50 flex items-center gap-2"
+        >
+          <Link href="/" className="hover:text-[#591623]">
+            Home
+          </Link>
           <span>/</span>
           <span className="text-[#26231F]">Shop</span>
         </nav>
@@ -134,28 +160,59 @@ function ShopContent() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div>
             <span className="text-[11px] tracking-[0.28em] uppercase text-[#591623] font-semibold block mb-1">
-              Drop 01 — 2026
+              {activeCollectionObj?.season || "ORIIKO Catalog"}
             </span>
             <h1
               className="text-2xl sm:text-5xl font-serif text-[#26231F] font-normal"
               style={{ fontFamily: '"Cormorant Garamond", "Didot", serif' }}
             >
-              The Complete Collection
+              {activeCollectionObj?.name || "The Complete Collection"}
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-[#26231F]/70 max-w-md font-sans leading-relaxed">
-            Heavyweight hoodies, embroidered tees, boxy sweatshirts, and stacked streetwear essentials built for India.
+            {activeCollectionObj?.description ||
+              "Heavyweight hoodies, embroidered tees, boxy sweatshirts, and stacked streetwear essentials built for India."}
           </p>
         </div>
+
+        {/* Collection Filter Pills */}
+        {collections.length > 0 && (
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2">
+            <button
+              type="button"
+              onClick={() => setSelectedCollection("all")}
+              className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-wider font-medium border whitespace-nowrap transition-colors cursor-pointer ${
+                selectedCollection === "all"
+                  ? "bg-[#591623] text-[#F2F2F0] border-[#591623]"
+                  : "border-[#26231F]/20 text-[#26231F]/75 hover:border-[#591623]"
+              }`}
+            >
+              All Collections
+            </button>
+            {collections.map((col) => (
+              <button
+                key={col.id}
+                type="button"
+                onClick={() => setSelectedCollection(col.slug)}
+                className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-wider font-medium border whitespace-nowrap transition-colors cursor-pointer ${
+                  selectedCollection === col.slug || selectedCollection === col.id
+                    ? "bg-[#591623] text-[#F2F2F0] border-[#591623]"
+                    : "border-[#26231F]/20 text-[#26231F]/75 hover:border-[#591623]"
+                }`}
+              >
+                {col.name}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* 6.4 Controls Toolbar: Filter Button + Count + Sort Dropdown */}
+      {/* Controls Toolbar */}
       <div className="py-4 sm:py-6 flex flex-wrap items-center justify-between gap-3 sm:gap-4 border-b border-[#26231F]/15">
-        {/* Filter toggle */}
         <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className="px-3.5 sm:px-4 py-2 sm:py-2.5 min-h-[40px] rounded-lg border border-[#26231F]/20 hover:border-[#591623] hover:text-[#591623] text-[11px] sm:text-xs uppercase tracking-widest font-medium transition-colors flex items-center gap-2"
+            className="px-3.5 sm:px-4 py-2 sm:py-2.5 min-h-[40px] rounded-lg border border-[#26231F]/20 text-[#26231F] hover:border-[#591623] hover:text-[#591623] text-[11px] sm:text-xs uppercase tracking-widest font-medium transition-colors flex items-center gap-2 cursor-pointer"
           >
             <IconFilter size={15} />
             <span>Filter</span>
@@ -167,13 +224,11 @@ function ShopContent() {
             )}
           </button>
 
-          {/* Active count */}
           <span className="text-[11px] sm:text-xs text-[#26231F]/60">
-            {filteredProducts.length} / {PRODUCTS.length} Items
+            {filteredProducts.length} / {products.length} Items
           </span>
         </div>
 
-        {/* Sort Selector */}
         <div className="flex items-center gap-2.5 sm:gap-3">
           <span className="text-xs uppercase tracking-wider text-[#26231F]/60 hidden sm:inline">
             Sort By:
@@ -204,28 +259,42 @@ function ShopContent() {
           <span className="text-[10px] tracking-widest uppercase text-[#26231F]/50 font-semibold mr-1">
             Active Filters:
           </span>
-          {selectedCategory !== "all" && (
+          {selectedCollection !== "all" && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#591623] text-[#F2F2F0] text-[10px] uppercase tracking-wider">
-              Category: {selectedCategory}
-              <button onClick={() => setSelectedCategory("all")}><IconClose size={12} /></button>
+              Collection: {activeCollectionObj?.name || selectedCollection}
+              <button onClick={() => setSelectedCollection("all")}>
+                <IconClose size={12} />
+              </button>
             </span>
           )}
           {selectedSizes.map((s) => (
-            <span key={s} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#591623] text-[#F2F2F0] text-[10px] uppercase tracking-wider">
+            <span
+              key={s}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#591623] text-[#F2F2F0] text-[10px] uppercase tracking-wider"
+            >
               Size {s}
-              <button onClick={() => toggleSize(s)}><IconClose size={12} /></button>
+              <button onClick={() => toggleSize(s)}>
+                <IconClose size={12} />
+              </button>
             </span>
           ))}
           {selectedColors.map((c) => (
-            <span key={c} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#591623] text-[#F2F2F0] text-[10px] uppercase tracking-wider">
+            <span
+              key={c}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#591623] text-[#F2F2F0] text-[10px] uppercase tracking-wider"
+            >
               {c}
-              <button onClick={() => toggleColor(c)}><IconClose size={12} /></button>
+              <button onClick={() => toggleColor(c)}>
+                <IconClose size={12} />
+              </button>
             </span>
           ))}
-          {maxPrice < 5000 && (
+          {effectiveMaxPrice < priceCeiling && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#591623] text-[#F2F2F0] text-[10px] uppercase tracking-wider">
-              Under ₹{maxPrice.toLocaleString("en-IN")}
-              <button onClick={() => setMaxPrice(5000)}><IconClose size={12} /></button>
+              Under ₹{effectiveMaxPrice.toLocaleString("en-IN")}
+              <button onClick={() => setMaxPrice(priceCeiling)}>
+                <IconClose size={12} />
+              </button>
             </span>
           )}
           <button
@@ -237,101 +306,116 @@ function ShopContent() {
         </div>
       )}
 
-      {/* Main Body: Filter Drawer + Product Grid */}
+      {/* Main Body */}
       <div className="pt-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Expandable Filter Sidebar */}
         {isFilterOpen && (
-          <aside className="lg:col-span-3 space-y-8 animate-in fade-in slide-in-from-left duration-200 border-b lg:border-b-0 lg:border-r border-[#26231F]/15 pr-0 lg:pr-8 pb-8 lg:pb-0">
-            {/* Category Filter */}
+          <aside className="lg:col-span-3 space-y-8 border-b lg:border-b-0 lg:border-r border-[#26231F]/15 pr-0 lg:pr-8 pb-8 lg:pb-0">
             <div className="space-y-3">
               <span className="text-[11px] tracking-[0.2em] uppercase text-[#26231F] font-semibold block">
-                Category
+                Collections
               </span>
               <div className="space-y-1.5">
-                {CATEGORIES.map((cat) => (
+                <button
+                  onClick={() => setSelectedCollection("all")}
+                  className={`block w-full text-left text-xs uppercase tracking-wider py-1 transition-colors ${
+                    selectedCollection === "all"
+                      ? "text-[#591623] font-bold"
+                      : "text-[#26231F]/70 hover:text-[#591623]"
+                  }`}
+                >
+                  All Collections
+                </button>
+                {collections.map((col) => (
                   <button
-                    key={cat.value}
-                    onClick={() => setSelectedCategory(cat.value)}
+                    key={col.id}
+                    onClick={() => setSelectedCollection(col.slug)}
                     className={`block w-full text-left text-xs uppercase tracking-wider py-1 transition-colors ${
-                      selectedCategory === cat.value
+                      selectedCollection === col.slug
                         ? "text-[#591623] font-bold"
                         : "text-[#26231F]/70 hover:text-[#591623]"
                     }`}
                   >
-                    {cat.label}
+                    {col.name}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Size Filter */}
-            <div className="space-y-3 pt-6 border-t border-[#26231F]/10">
-              <span className="text-[11px] tracking-[0.2em] uppercase text-[#26231F] font-semibold block">
-                Size
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {SIZES.map((size) => {
-                  const isSelected = selectedSizes.includes(size);
-                  return (
-                    <button
-                      key={size}
-                      onClick={() => toggleSize(size)}
-                      className={`px-3 py-1.5 rounded-lg text-xs uppercase tracking-wider border transition-all ${
-                        isSelected
-                          ? "bg-[#591623] text-[#F2F2F0] border-[#591623]"
-                          : "border-[#26231F]/20 text-[#26231F] hover:border-[#591623]"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Color Filter */}
-            <div className="space-y-3 pt-6 border-t border-[#26231F]/10">
-              <span className="text-[11px] tracking-[0.2em] uppercase text-[#26231F] font-semibold block">
-                Color Harmony
-              </span>
-              <div className="space-y-2">
-                {COLORS.map((color) => {
-                  const isSelected = selectedColors.includes(color.name);
-                  return (
-                    <button
-                      key={color.name}
-                      onClick={() => toggleColor(color.name)}
-                      className="flex items-center gap-3 w-full text-left text-xs text-[#26231F] hover:text-[#591623] transition-colors"
-                    >
-                      <span
-                        className={`w-3.5 h-3.5 rounded-full border border-[#26231F]/20 ${
-                          isSelected ? "ring-2 ring-[#591623] ring-offset-1" : ""
+            {availableSizes.length > 0 && (
+              <div className="space-y-3 pt-6 border-t border-[#26231F]/10">
+                <span className="text-[11px] tracking-[0.2em] uppercase text-[#26231F] font-semibold block">
+                  Size
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {availableSizes.map((size) => {
+                    const isSelected = selectedSizes.includes(size);
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => toggleSize(size)}
+                        className={`px-3 py-1.5 rounded-lg text-xs uppercase tracking-wider border transition-all ${
+                          isSelected
+                            ? "bg-[#591623] text-[#F2F2F0] border-[#591623]"
+                            : "border-[#26231F]/20 text-[#26231F] hover:border-[#591623]"
                         }`}
-                        style={{ backgroundColor: color.hex }}
-                      />
-                      <span className={isSelected ? "font-bold text-[#591623]" : ""}>
-                        {color.name}
-                      </span>
-                    </button>
-                  );
-                })}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Price Filter */}
+            {availableColors.length > 0 && (
+              <div className="space-y-3 pt-6 border-t border-[#26231F]/10">
+                <span className="text-[11px] tracking-[0.2em] uppercase text-[#26231F] font-semibold block">
+                  Colorway
+                </span>
+                <div className="space-y-2">
+                  {availableColors.map((color) => {
+                    const isSelected = selectedColors.includes(color.name);
+                    return (
+                      <button
+                        key={color.name}
+                        onClick={() => toggleColor(color.name)}
+                        className="flex items-center gap-3 w-full text-left text-xs text-[#26231F] hover:text-[#591623] transition-colors"
+                      >
+                        <span
+                          className={`w-3.5 h-3.5 rounded-full border border-[#26231F]/20 ${
+                            isSelected ? "ring-2 ring-[#591623] ring-offset-1" : ""
+                          }`}
+                          style={{ backgroundColor: color.hex }}
+                        />
+                        <span
+                          className={
+                            isSelected ? "font-bold text-[#591623]" : ""
+                          }
+                        >
+                          {color.name}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <div className="space-y-3 pt-6 border-t border-[#26231F]/10">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-[11px] tracking-[0.2em] uppercase text-[#26231F] font-semibold">
                   Maximum Price
                 </span>
-                <span className="font-semibold text-[#591623]">₹{maxPrice.toLocaleString("en-IN")}</span>
+                <span className="font-semibold text-[#591623]">
+                  ₹{effectiveMaxPrice.toLocaleString("en-IN")}
+                </span>
               </div>
               <input
                 type="range"
-                min="1000"
-                max="5000"
+                min="500"
+                max={priceCeiling}
                 step="250"
-                value={maxPrice}
+                value={effectiveMaxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full accent-[#591623] cursor-pointer"
               />
@@ -340,7 +424,7 @@ function ShopContent() {
             <div className="pt-2">
               <button
                 onClick={clearAllFilters}
-                className="w-full py-2.5 rounded-full border border-[#26231F]/20 hover:border-[#8C072B] hover:text-[#8C072B] text-xs uppercase tracking-widest font-medium transition-colors"
+                className="w-full py-2.5 rounded-full border border-[#26231F]/20 text-[#26231F] hover:border-[#8C072B] hover:text-[#8C072B] text-xs uppercase tracking-widest font-medium transition-colors"
               >
                 Reset All Filters
               </button>
@@ -348,9 +432,17 @@ function ShopContent() {
           </aside>
         )}
 
-        {/* 6.2 Product Grid */}
         <div className={isFilterOpen ? "lg:col-span-9" : "lg:col-span-12"}>
-          {filteredProducts.length > 0 ? (
+          {catalogLoading ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8">
+              {[0, 1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="aspect-[3/4] rounded-xl bg-[#26231F]/8 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div
               className={`grid grid-cols-2 gap-3.5 sm:gap-6 lg:gap-8 ${
                 isFilterOpen ? "lg:grid-cols-3" : "lg:grid-cols-4"
@@ -363,17 +455,23 @@ function ShopContent() {
           ) : (
             <div className="py-24 text-center space-y-4 border border-[#26231F]/15 rounded-2xl p-8 bg-[#F2F2F0]">
               <h3 className="text-2xl font-serif text-[#26231F]">
-                No matching pieces found
+                {products.length === 0
+                  ? "No active drops published yet"
+                  : "No matching pieces found"}
               </h3>
               <p className="text-xs text-[#26231F]/60 max-w-sm mx-auto">
-                Try adjusting or resetting your filter criteria to see more drops.
+                {products.length === 0
+                  ? "Publish products and collections in the ORIIKO Admin Console to showcase them here."
+                  : "Try adjusting or resetting your filter criteria to see more drops."}
               </p>
-              <button
-                onClick={clearAllFilters}
-                className="px-6 py-3 rounded-full bg-[#591623] text-[#F2F2F0] text-xs uppercase tracking-widest hover:bg-[#8C072B] transition-colors"
-              >
-                Clear All Filters
-              </button>
+              {products.length > 0 && (
+                <button
+                  onClick={clearAllFilters}
+                  className="px-6 py-3 rounded-full bg-[#591623] text-[#F2F2F0] text-xs uppercase tracking-widest hover:bg-[#8C072B] transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              )}
             </div>
           )}
         </div>

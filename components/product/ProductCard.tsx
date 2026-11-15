@@ -86,7 +86,7 @@ export function ProductCard({ product, showBadge = true }: ProductCardProps) {
                 e.stopPropagation();
                 setQuickViewProduct(product);
               }}
-              className="py-2 sm:py-3 px-2.5 sm:px-3.5 rounded-lg bg-[#F2F2F0] hover:bg-[#26231F] active:scale-[0.98] text-[#26231F] hover:text-[#F2F2F0] border border-[#26231F]/20 text-[9px] sm:text-[10px] uppercase tracking-wider font-medium transition-all shrink-0 cursor-pointer"
+              className="py-2 sm:py-3 px-2.5 sm:px-3.5 rounded-lg bg-[#F2F2F0] dark:bg-[#26231F] hover:bg-[#26231F] dark:hover:bg-[#591623] active:scale-[0.98] text-[#26231F] dark:text-[#F2F2F0] hover:text-[#F2F2F0] border border-[#26231F]/20 dark:border-[#F2F2F0]/20 text-[9px] sm:text-[10px] uppercase tracking-wider font-medium transition-all shrink-0 cursor-pointer"
               aria-label={`Quick view ${product.name}`}
             >
               <span className="sm:hidden">View</span>
@@ -100,12 +100,12 @@ export function ProductCard({ product, showBadge = true }: ProductCardProps) {
       <div className="pt-3 sm:pt-4 pb-1 sm:pb-2 flex flex-col flex-1 justify-between">
         <div className="space-y-1">
           {/* Collection tag */}
-          <span className="text-[9px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.22em] uppercase text-[#26231F]/50 font-medium block truncate">
+          <span className="text-[9px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.22em] uppercase text-[#26231F]/50 dark:text-[#F2F2F0]/55 font-medium block truncate">
             {product.collection}
           </span>
 
           {/* Title */}
-          <h3 className="text-[13px] sm:text-base font-serif font-normal text-[#26231F] group-hover:text-[#591623] transition-colors line-clamp-1">
+          <h3 className="text-[13px] sm:text-base font-serif font-normal text-[#26231F] dark:text-[#F2F2F0] group-hover:text-[#591623] dark:group-hover:text-[#F2F2F0]/80 transition-colors line-clamp-1">
             <Link href={`/product/${product.slug}`}>{product.name}</Link>
           </h3>
 
@@ -120,7 +120,7 @@ export function ProductCard({ product, showBadge = true }: ProductCardProps) {
                 />
               ))}
             </div>
-            <span className="text-[10px] text-[#26231F]/50 font-sans">
+            <span className="text-[10px] text-[#26231F]/50 dark:text-[#F2F2F0]/55 font-sans">
               ({product.reviewCount})
             </span>
           </div>
@@ -129,11 +129,11 @@ export function ProductCard({ product, showBadge = true }: ProductCardProps) {
         {/* Pricing and Color Swatches */}
         <div className="pt-2 flex flex-wrap items-center justify-between gap-1.5">
           <div className="flex items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xs sm:text-sm font-medium text-[#26231F]">
+            <span className="text-xs sm:text-sm font-medium text-[#26231F] dark:text-[#F2F2F0]">
               {formatPrice(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-[11px] sm:text-xs text-[#26231F]/40 line-through">
+              <span className="text-[11px] sm:text-xs text-[#26231F]/40 dark:text-[#F2F2F0]/40 line-through">
                 {formatPrice(product.originalPrice)}
               </span>
             )}
@@ -148,7 +148,7 @@ export function ProductCard({ product, showBadge = true }: ProductCardProps) {
                   onClick={() => setSelectedColor(c.name)}
                   className={`w-2.5 h-2.5 rounded-full transition-transform ${
                     selectedColor === c.name
-                      ? "ring-1 ring-offset-1 ring-[#591623] scale-110"
+                      ? "ring-1 ring-offset-1 dark:ring-offset-[#26231F] ring-[#591623] dark:ring-[#F2F2F0] scale-110"
                       : "opacity-70 hover:opacity-100"
                   }`}
                   style={{ backgroundColor: c.hex }}

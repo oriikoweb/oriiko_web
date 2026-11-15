@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { PolicyPageShell } from "../../components/legal/PolicyPageShell";
+import { fetchStoreBootstrap } from "../../lib/store/server";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shipping Policy & Pan-India Delivery",
@@ -7,7 +10,11 @@ export const metadata: Metadata = {
     "ORIIKO India shipping policy covering dispatch timelines, metro and pan-India delivery windows, free shipping threshold, and Cash on Delivery (COD).",
 };
 
-export default function ShippingPolicyPage() {
+export default async function ShippingPolicyPage() {
+  const { settings } = await fetchStoreBootstrap();
+  const formattedThreshold = `₹${settings.freeShippingThreshold.toLocaleString("en-IN")}`;
+  const formattedCharge = `₹${settings.deliveryCharge.toLocaleString("en-IN")}`;
+
   return (
     <PolicyPageShell
       currentPath="/shipping-policy"
@@ -16,8 +23,20 @@ export default function ShippingPolicyPage() {
       effectiveDate="1 November 2026"
       intro="ORIIKO currently ships exclusively across India via insured express logistics partners, with live tracking updates from dispatch to doorstep."
       highlights={[
-        { label: "Free Shipping Threshold", value: "Free express delivery on orders above ₹2,999" },
-        { label: "Standard Shipping Fee", value: "Flat ₹149 on orders under ₹2,999" },
+        {
+          label: "Free Shipping Threshold",
+          value:
+            settings.freeShippingThreshold <= 0
+              ? "Free express delivery on all orders"
+              : `Free express delivery on orders above ${formattedThreshold}`,
+        },
+        {
+          label: "Standard Shipping Fee",
+          value:
+            settings.deliveryCharge <= 0
+              ? "Complimentary Pan-India delivery"
+              : `Flat ${formattedCharge} on orders under ${formattedThreshold}`,
+        },
         { label: "Dispatch Speed", value: "Within 24–48 business hours" },
       ]}
       sections={[

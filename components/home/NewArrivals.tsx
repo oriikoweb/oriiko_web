@@ -4,14 +4,19 @@ import React from "react";
 import Link from "next/link";
 import { IconArrowRight } from "../ui/Icons";
 import { ProductCard } from "../product/ProductCard";
-import { PRODUCTS } from "../../data/products";
+import { useStore } from "../../context/StoreContext";
 
 export function NewArrivals() {
-  const newArrivals = PRODUCTS.filter((p) => p.isNewArrival).slice(0, 4);
+  const { products, catalogLoading } = useStore();
+  const arrivals = products.filter((p) => p.isNewArrival).slice(0, 4);
+  const items = arrivals.length > 0 ? arrivals : products.slice(0, 4);
+
+  if (!catalogLoading && items.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-10 sm:py-22 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
-      {/* Centered Editorial Heading matching Hannovae rhythm */}
       <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12 space-y-2.5 sm:space-y-3">
         <span className="text-[11px] tracking-[0.28em] uppercase text-[#8C072B] font-semibold block">
           Drop 01 &middot; Latest
@@ -33,11 +38,19 @@ export function NewArrivals() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-7">
-        {newArrivals.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {catalogLoading ? (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-7">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="aspect-[3/4] rounded-xl bg-[#26231F]/8 animate-pulse" />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-7">
+          {items.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

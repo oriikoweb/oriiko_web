@@ -11,7 +11,7 @@ export interface AuthUser {
   full_name: string | null;
   phone: string | null;
   avatar_url: string | null;
-  role: "customer" | "admin" | "editor";
+  role: "customer" | "admin";
   auth_provider: string;
   created_at: string;
 }
@@ -130,6 +130,40 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   if (error || !data) return null;
 
   const row = Array.isArray(data) ? data[0] : data;
-  return (row as AuthUser) ?? null;
+  if (!row) return null;
+  const user = row as AuthUser & { role: string };
+  return {
+    ...user,
+    role: user.role === "admin" ? "admin" : "customer",
+  };
+}
+
+export async function requireAdminSession(): Promise<{
+  user: AuthUser;
+  tokenHash: string;
+  supabase: ReturnType<typeof getDbClient>;
+} | null> {
+  const rawToken = await getRawSessionTokenFromCookie();
+  if (!rawToken) return null;
+
+  const tokenHash = hashToken(rawToken);
+  const supabase = getDbClient();
+
+  const { data, error } = await supabase.rpc("get_user_by_session", {
+    p_token_hash: tokenHash,
+  });
+
+  if (error || !data) return null;
+
+  const row = (Array.isArray(data) ? data[0] : data) as
+    | (AuthUser & { role: string })
+    | undefined;
+  if (!row || row.role !== "admin") return null;
+
+  return {
+    user: { ...row, role: "admin" },
+    tokenHash,
+    supabase,
+  };
 }
 

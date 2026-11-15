@@ -10,24 +10,26 @@ import { CartDrawer } from "../cart/CartDrawer";
 import { QuickViewModal } from "../product/QuickViewModal";
 import { Footer } from "../footer/Footer";
 
-function isStandaloneAuthRoute(pathname: string | null): boolean {
+function isFramelessRoute(pathname: string | null): boolean {
   if (!pathname) return false;
   return (
     pathname === "/signin" ||
     pathname === "/signup" ||
     pathname === "/auth" ||
-    pathname.startsWith("/auth/")
+    pathname.startsWith("/auth/") ||
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/")
   );
 }
 
 /**
  * Conditionally wraps routes in the global storefront header, drawers, and
- * footer, leaving dedicated authentication routes focused without duplicate branding.
+ * footer, leaving dedicated authentication and admin routes focused without duplicate branding.
  */
 export function StorefrontFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  if (isStandaloneAuthRoute(pathname)) {
+  if (isFramelessRoute(pathname)) {
     return <div className="flex-1 flex flex-col">{children}</div>;
   }
 

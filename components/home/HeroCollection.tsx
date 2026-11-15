@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useStore } from "@/context/StoreContext";
 
 const HERO_SLIDES = [
   {
@@ -33,12 +34,12 @@ const HERO_SLIDES = [
   },
 ];
 
-const DESKTOP_VIDEO_SRC =
-  process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "/videos/hero-bg.mp4";
-const MOBILE_VIDEO_SRC =
-  process.env.NEXT_PUBLIC_HERO_VIDEO_MOBILE_URL || DESKTOP_VIDEO_SRC;
+// Env-var fallbacks (used when no DB video is configured)
+const ENV_DESKTOP_VIDEO = process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "";
+const ENV_MOBILE_VIDEO = process.env.NEXT_PUBLIC_HERO_VIDEO_MOBILE_URL || "";
 
 export function HeroCollection() {
+  const { heroVideoUrl } = useStore();
   const sectionRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -102,7 +103,12 @@ export function HeroCollection() {
   }, [prefersReducedMotion, videoError]);
 
   const activeSlide = HERO_SLIDES[currentSlide];
-  const videoSrc = isMobileViewport ? MOBILE_VIDEO_SRC : DESKTOP_VIDEO_SRC;
+
+  // Priority: DB-stored URL → env var → no video (poster slideshow only)
+  const desktopVideoSrc = heroVideoUrl || ENV_DESKTOP_VIDEO;
+  const mobileVideoSrc = heroVideoUrl || ENV_MOBILE_VIDEO || desktopVideoSrc;
+  const videoSrc = isMobileViewport ? mobileVideoSrc : desktopVideoSrc;
+  const hasVideo = Boolean(videoSrc);
 
   return (
     <section
@@ -126,7 +132,7 @@ export function HeroCollection() {
       </div>
 
       {/* Layer 2: Dedicated full-bleed edge-to-edge background video slot */}
-      {!prefersReducedMotion && !videoError && (
+      {!prefersReducedMotion && !videoError && hasVideo && (
         <video
           key={videoSrc}
           ref={videoRef}

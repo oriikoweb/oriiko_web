@@ -2,17 +2,25 @@
 
 import React from "react";
 import Link from "next/link";
-
-const ANNOUNCEMENTS = [
-  "FREE PAN-INDIA SHIPPING ON ORDERS OVER ₹2,999",
-  "DROP 01 LIVE: 480 GSM HOODIES & EMBROIDERED TEES",
-  "USE CODE ORIIKO10 FOR 10% OFF YOUR FIRST ORDER",
-  "14-DAY EASY EXCHANGE ACROSS INDIA",
-  "UPI, CARDS & CASH ON DELIVERY AVAILABLE",
-  "ENGINEERED IN HEAVYWEIGHT COMBED COTTON",
-];
+import { useStore } from "../../context/StoreContext";
 
 export function AnnouncementBar() {
+  const { freeShippingThreshold, formatPrice } = useStore();
+
+  const thresholdText =
+    freeShippingThreshold <= 0
+      ? "FREE PAN-INDIA SHIPPING ON ALL ORDERS"
+      : `FREE PAN-INDIA SHIPPING ON ORDERS OVER ${formatPrice(freeShippingThreshold)}`;
+
+  const announcements = [
+    thresholdText,
+    "DROP 01 LIVE: 480 GSM HOODIES & EMBROIDERED TEES",
+    "USE CODE ORIIKO10 FOR 10% OFF YOUR FIRST ORDER",
+    "14-DAY EASY EXCHANGE ACROSS INDIA",
+    "UPI, CARDS & CASH ON DELIVERY AVAILABLE",
+    "ENGINEERED IN HEAVYWEIGHT COMBED COTTON",
+  ];
+
   return (
     <aside
       aria-label="Store Announcements"
@@ -20,7 +28,7 @@ export function AnnouncementBar() {
     >
       <div className="w-full overflow-hidden text-[10px] sm:text-[11px] font-medium tracking-[0.14em] sm:tracking-[0.18em] uppercase">
         <div className="animate-ticker flex whitespace-nowrap items-center">
-          {ANNOUNCEMENTS.concat(ANNOUNCEMENTS).map((item, index) => (
+          {announcements.concat(announcements).map((item, index) => (
             <Link
               key={index}
               href="/shop"
